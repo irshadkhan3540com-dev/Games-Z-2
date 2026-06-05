@@ -66,7 +66,7 @@ jobs:
           <?xml version="1.0" encoding="utf-8"?><adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android"><background android:drawable="@android:color/black"/><foreground android:drawable="@drawable/ic_plus_circle"/></adaptive-icon>
           EOF
 
-          # MAIN DASHBOARD (Cinematic View)
+          # MAIN DASHBOARD (Cinematic View) - FIXED '&' TO 'and' HERE
           cat << 'EOF' > app/src/main/res/layout/activity_main.xml
           <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:background="#020813">
               <LinearLayout android:id="@+id/walletHeader" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_alignParentTop="true" android:layout_centerHorizontal="true" android:background="#0D1F3D" android:padding="12dp" android:layout_marginTop="16dp" android:elevation="5dp">
@@ -78,14 +78,14 @@ jobs:
               <com.zatomic.tradinggame.CinematicWorldView android:id="@+id/cinematicWorldView" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_below="@id/tvTowerFloor" android:layout_above="@+id/controlBase"/>
 
               <LinearLayout android:id="@+id/controlBase" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_alignParentBottom="true" android:padding="12dp" android:background="#99000000">
-                  <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Touch & Swipe: Rotate Island | Fish jumps every 15s" android:textColor="#A0AAB5" android:textSize="12sp" android:layout_gravity="center" android:layout_marginBottom="6dp"/>
+                  <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Touch and Swipe: Rotate Island | Fish jumps every 15s" android:textColor="#A0AAB5" android:textSize="12sp" android:layout_gravity="center" android:layout_marginBottom="6dp"/>
                   <Button android:id="@+id/btnUpgradeTower" android:layout_width="match_parent" android:layout_height="50dp" android:text="Build New Floor Level" android:backgroundTint="#FF9800" android:textColor="#FFFFFF" android:layout_marginBottom="6dp"/>
                   <Button android:id="@+id/btnOpenMarket" android:layout_width="match_parent" android:layout_height="60dp" android:text="ENTER SECURE TRADING ZONE" android:textSize="15sp" android:textStyle="bold" android:backgroundTint="#00E676" android:textColor="#000000"/>
               </LinearLayout>
           </RelativeLayout>
           EOF
 
-          # OFFLINE TIME CLAIM HUB (Wallet Panel)
+          # OFFLINE TIME CLAIM HUB - FIXED '&' TO 'AND' HERE
           cat << 'EOF' > app/src/main/res/layout/activity_wallet_settings.xml
           <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:background="#020813" android:padding="16dp">
               <TextView android:id="@+id/tvTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="OFFLINE TIME CLAIM HUB" android:textColor="#00E5FF" android:textSize="22sp" android:textStyle="bold" android:layout_centerHorizontal="true" android:layout_marginTop="10dp"/>
@@ -106,7 +106,7 @@ jobs:
                   </LinearLayout>
               </LinearLayout>
               <TextView android:id="@+id/tvMahaulText" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Mahaul Text Loading..." android:textColor="#CFD8DC" android:gravity="center" android:layout_above="@+id/btnBackToHome" android:layout_marginBottom="15dp" android:textStyle="bold"/>
-              <Button android:id="@+id/btnBackToHome" android:layout_width="match_parent" android:layout_height="50dp" android:text="CLOSE VAULT & RETURN" android:backgroundTint="#78909C" android:textColor="#000000" android:layout_alignParentBottom="true"/>
+              <Button android:id="@+id/btnBackToHome" android:layout_width="match_parent" android:layout_height="50dp" android:text="CLOSE VAULT AND RETURN" android:backgroundTint="#78909C" android:textColor="#000000" android:layout_alignParentBottom="true"/>
           </RelativeLayout>
           EOF
 
@@ -171,19 +171,19 @@ jobs:
 
               // 15-Second Fish Animation Logic
               private var fishTimeProgress = 0f
-              private val animationDuration = 100f // Frames it takes to cross the screen
+              private val animationDuration = 100f
               private var isFishFlying = false
               private var lastJumpTime = System.currentTimeMillis()
 
               private val paintSky = Paint().apply { isAntiAlias = true }
               private val paintWater = Paint().apply { color = Color.parseColor("#0F4B99"); style = Paint.Style.FILL; isAntiAlias = true }
               private val paintIsland = Paint().apply { color = Color.parseColor("#2E7D32"); style = Paint.Style.FILL; isAntiAlias = true }
-              private val paintFish = Paint().apply { color = Color.parseColor("#FF9800"); style = Paint.Style.FILL; isAntiAlias = true } // Orange glowing fish
+              private val paintFish = Paint().apply { color = Color.parseColor("#FF9800"); style = Paint.Style.FILL; isAntiAlias = true }
 
               override fun onTouchEvent(event: MotionEvent): Boolean {
                   val x = event.x
                   if (event.action == MotionEvent.ACTION_MOVE) {
-                      rotationAngle += (x - previousX) * 0.5f // Rotate world
+                      rotationAngle += (x - previousX) * 0.5f
                       invalidate()
                   }
                   previousX = x
@@ -206,7 +206,7 @@ jobs:
                   // 3. 3D ISLAND DISK
                   canvas.drawOval(cx - 280f, cy - 80f, cx + 280f, cy + 80f, paintIsland)
 
-                  // 4. COLORFUL TOWER BUILDER (Dependent on Floors)
+                  // 4. COLORFUL TOWER BUILDER
                   val towerWidth = 100f
                   val floorHeight = 40f
                   for (i in 0 until floorCount) {
@@ -216,49 +216,44 @@ jobs:
 
                       val pTower = Paint().apply {
                           color = when (i % 4) {
-                              0 -> Color.parseColor("#00E5FF") // Cyan
-                              1 -> Color.parseColor("#FFD700") // Gold
-                              2 -> Color.parseColor("#00E676") // Green
-                              else -> Color.parseColor("#E91E63") // Pink
+                              0 -> Color.parseColor("#00E5FF")
+                              1 -> Color.parseColor("#FFD700")
+                              2 -> Color.parseColor("#00E676")
+                              else -> Color.parseColor("#E91E63")
                           }
                           style = Paint.Style.FILL
                           isAntiAlias = true
                       }
                       canvas.drawRect(rect, pTower)
                       
-                      // 3D Shadow detail
                       val pShadow = Paint().apply { color = Color.parseColor("#44000000"); style = Paint.Style.FILL }
                       canvas.drawRect(cx, topY, cx + towerWidth / 2f, bottomY, pShadow)
                   }
 
-                  // 5. THE 15-SECOND FISH JUMP ENGINE (Parabolic Arc OVER the tower)
+                  // 5. THE 15-SECOND FISH JUMP ENGINE
                   val now = System.currentTimeMillis()
-                  if (!isFishFlying && now - lastJumpTime > 15000) { // EXCATLY 15 SECONDS TRIGGER
+                  if (!isFishFlying && now - lastJumpTime > 15000) {
                       isFishFlying = true
                       fishTimeProgress = 0f
                   }
 
                   if (isFishFlying) {
-                      fishTimeProgress += 1.5f // Speed of fish
+                      fishTimeProgress += 1.5f
                       if (fishTimeProgress > animationDuration) {
                           isFishFlying = false
-                          lastJumpTime = System.currentTimeMillis() // Reset timer
+                          lastJumpTime = System.currentTimeMillis()
                       } else {
                           val normTime = fishTimeProgress / animationDuration
                           val fishX = (normTime * (width + 300f)) - 150f
                           
-                          // MATH: Parabola that always clears the TOP of the highest tower floor
                           val towerTopY = cy - 20f - (floorCount * floorHeight)
-                          val clearance = 100f // 100 pixels above the top floor
+                          val clearance = 100f
                           val peakY = towerTopY - clearance
                           
-                          // Calculate arc
                           val heightDelta = cy - peakY
                           val fishY = cy - (sin(normTime * Math.PI) * heightDelta).toFloat()
 
-                          // Draw Fish Body
                           canvas.drawOval(fishX - 30f, fishY - 15f, fishX + 30f, fishY + 15f, paintFish)
-                          // Draw Fish Tail
                           val tail = Path().apply {
                               moveTo(fishX - 25f, fishY)
                               lineTo(fishX - 50f, fishY - 20f)
@@ -269,7 +264,7 @@ jobs:
                       }
                   }
 
-                  invalidate() // Request next frame for smooth animation
+                  invalidate()
               }
           }
           EOF
@@ -309,7 +304,7 @@ jobs:
           }
           EOF
 
-          # 3. MAIN ACTIVITY (Dashboard)
+          # 3. MAIN ACTIVITY
           cat << 'EOF' > app/src/main/java/com/zatomic/tradinggame/MainActivity.kt
           package com.zatomic.tradinggame
           import android.content.Context
@@ -377,7 +372,7 @@ jobs:
           }
           EOF
 
-          # 4. WALLET SETTINGS ACTIVITY (Offline Hub)
+          # 4. WALLET SETTINGS ACTIVITY
           cat << 'EOF' > app/src/main/java/com/zatomic/tradinggame/WalletSettingsActivity.kt
           package com.zatomic.tradinggame
           import android.content.Context
@@ -542,4 +537,3 @@ jobs:
         with:
           name: "Trading-Tower-Fish-Engine"
           path: app/build/outputs/apk/debug/app-debug.apk
-
