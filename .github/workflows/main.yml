@@ -66,7 +66,7 @@ jobs:
           <?xml version="1.0" encoding="utf-8"?><adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android"><background android:drawable="@android:color/black"/><foreground android:drawable="@drawable/ic_plus_circle"/></adaptive-icon>
           EOF
 
-          # MAIN DASHBOARD (Cinematic View) - FIXED '&' TO 'and' HERE
+          # MAIN DASHBOARD (Cinematic View)
           cat << 'EOF' > app/src/main/res/layout/activity_main.xml
           <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:background="#020813">
               <LinearLayout android:id="@+id/walletHeader" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_alignParentTop="true" android:layout_centerHorizontal="true" android:background="#0D1F3D" android:padding="12dp" android:layout_marginTop="16dp" android:elevation="5dp">
@@ -85,7 +85,7 @@ jobs:
           </RelativeLayout>
           EOF
 
-          # OFFLINE TIME CLAIM HUB - FIXED '&' TO 'AND' HERE
+          # OFFLINE TIME CLAIM HUB
           cat << 'EOF' > app/src/main/res/layout/activity_wallet_settings.xml
           <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:background="#020813" android:padding="16dp">
               <TextView android:id="@+id/tvTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="OFFLINE TIME CLAIM HUB" android:textColor="#00E5FF" android:textSize="22sp" android:textStyle="bold" android:layout_centerHorizontal="true" android:layout_marginTop="10dp"/>
@@ -511,10 +511,10 @@ jobs:
           }
           EOF
 
-          # MANIFEST
+          # MANIFEST - FIXED (Removed roundIcon reference)
           cat << 'EOF' > app/src/main/AndroidManifest.xml
           <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-              <application android:label="VIP Trading World" android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher_round" android:theme="@style/Theme.TradingGame">
+              <application android:label="VIP Trading World" android:icon="@mipmap/ic_launcher" android:theme="@style/Theme.TradingGame">
                   <activity android:name=".MainActivity" android:exported="true">
                       <intent-filter>
                           <action android:name="android.intent.action.MAIN" />
@@ -537,3 +537,4 @@ jobs:
         with:
           name: "Trading-Tower-Fish-Engine"
           path: app/build/outputs/apk/debug/app-debug.apk
+
