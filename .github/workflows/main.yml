@@ -1,0 +1,545 @@
+name: "Ultimate 3D Cinematic Tower & Trading Engine"
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Step 1: Checkout Repository"
+        uses: actions/checkout@v4
+
+      - name: "Step 2: Setup Java 17 for Android"
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: "Step 3: Create Core Project Folders"
+        run: |
+          mkdir -p app/src/main/java/com/zatomic/tradinggame
+          mkdir -p app/src/main/res/layout
+          mkdir -p app/src/main/res/drawable
+          mkdir -p app/src/main/res/values
+          mkdir -p app/src/main/res/mipmap-anydpi-v26
+
+      - name: "Step 4: Gradle Build System Configuration"
+        run: |
+          cat << 'EOF' > settings.gradle
+          pluginManagement { repositories { google(); mavenCentral(); gradlePluginPortal() } }
+          dependencyResolutionManagement { repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS); repositories { google(); mavenCentral() } }
+          rootProject.name = "TradingTowerUltimate"
+          include ':app'
+          EOF
+
+          cat << 'EOF' > build.gradle
+          plugins { id 'com.android.application' version '8.3.0' apply false; id 'org.jetbrains.kotlin.android' version '1.9.0' apply false }
+          EOF
+
+          cat << 'EOF' > gradle.properties
+          android.useAndroidX=true
+          org.gradle.jvmargs=-Xmx4g -Dfile.encoding=UTF-8
+          EOF
+          
+          gradle wrapper --gradle-version 8.4 --distribution-type bin
+
+      - name: "Step 5: App UI XMLs & Layouts"
+        run: |
+          # Colors and Themes
+          cat << 'EOF' > app/src/main/res/values/colors.xml
+          <?xml version="1.0" encoding="utf-8"?><resources><color name="black">#000000</color><color name="white">#FFFFFF</color></resources>
+          EOF
+          cat << 'EOF' > app/src/main/res/values/themes.xml
+          <resources><style name="Theme.TradingGame" parent="Theme.AppCompat.Light.NoActionBar"/></resources>
+          EOF
+
+          # Icons
+          cat << 'EOF' > app/src/main/res/drawable/ic_plus_circle.xml
+          <vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="24dp" android:height="24dp" android:viewportWidth="24" android:viewportHeight="24">
+              <path android:fillColor="#FFD700" android:pathData="M12,2C6.48,2 2,6.48 2,12s4.48,10 10,10 10,-4.48 10,-10S17.52,2 12,2zM17,13h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>
+          </vector>
+          EOF
+          cat << 'EOF' > app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+          <?xml version="1.0" encoding="utf-8"?><adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android"><background android:drawable="@android:color/black"/><foreground android:drawable="@drawable/ic_plus_circle"/></adaptive-icon>
+          EOF
+
+          # MAIN DASHBOARD (Cinematic View)
+          cat << 'EOF' > app/src/main/res/layout/activity_main.xml
+          <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:background="#020813">
+              <LinearLayout android:id="@+id/walletHeader" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_alignParentTop="true" android:layout_centerHorizontal="true" android:background="#0D1F3D" android:padding="12dp" android:layout_marginTop="16dp" android:elevation="5dp">
+                  <TextView android:id="@+id/tvWallet" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Balance: ₹10000" android:textColor="#FFD700" android:textSize="20sp" android:textStyle="bold"/>
+                  <ImageView android:id="@+id/btnOpenWalletSettings" android:layout_width="26dp" android:layout_height="26dp" android:src="@drawable/ic_plus_circle" android:layout_marginStart="10dp"/>
+              </LinearLayout>
+              <TextView android:id="@+id/tvTowerFloor" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Island Tower: Level 1" android:textColor="#00E5FF" android:textSize="15sp" android:layout_below="@id/walletHeader" android:layout_centerHorizontal="true" android:layout_marginTop="6dp"/>
+              
+              <com.zatomic.tradinggame.CinematicWorldView android:id="@+id/cinematicWorldView" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_below="@id/tvTowerFloor" android:layout_above="@+id/controlBase"/>
+
+              <LinearLayout android:id="@+id/controlBase" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_alignParentBottom="true" android:padding="12dp" android:background="#99000000">
+                  <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Touch & Swipe: Rotate Island | Fish jumps every 15s" android:textColor="#A0AAB5" android:textSize="12sp" android:layout_gravity="center" android:layout_marginBottom="6dp"/>
+                  <Button android:id="@+id/btnUpgradeTower" android:layout_width="match_parent" android:layout_height="50dp" android:text="Build New Floor Level" android:backgroundTint="#FF9800" android:textColor="#FFFFFF" android:layout_marginBottom="6dp"/>
+                  <Button android:id="@+id/btnOpenMarket" android:layout_width="match_parent" android:layout_height="60dp" android:text="ENTER SECURE TRADING ZONE" android:textSize="15sp" android:textStyle="bold" android:backgroundTint="#00E676" android:textColor="#000000"/>
+              </LinearLayout>
+          </RelativeLayout>
+          EOF
+
+          # OFFLINE TIME CLAIM HUB (Wallet Panel)
+          cat << 'EOF' > app/src/main/res/layout/activity_wallet_settings.xml
+          <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:background="#020813" android:padding="16dp">
+              <TextView android:id="@+id/tvTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="OFFLINE TIME CLAIM HUB" android:textColor="#00E5FF" android:textSize="22sp" android:textStyle="bold" android:layout_centerHorizontal="true" android:layout_marginTop="10dp"/>
+              <TextView android:id="@+id/tvCurrentBalance" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Funds: ₹10000" android:textColor="#FFD700" android:textSize="18sp" android:layout_below="@id/tvTitle" android:layout_centerHorizontal="true" android:layout_marginTop="5dp"/>
+              
+              <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_below="@id/tvCurrentBalance" android:layout_marginTop="25dp">
+                  <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#0D1F3D" android:padding="12dp" android:layout_marginBottom="12dp">
+                      <TextView android:id="@+id/tvTimer1hr" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="1 Hour Cooldown: Ready" android:textColor="#FFFFFF"/>
+                      <Button android:id="@+id/btnClaim1hr" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Start Timer (Get ₹100)" android:backgroundTint="#00E676" android:textColor="#000000" android:layout_marginTop="5dp"/>
+                  </LinearLayout>
+                  <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#0D1F3D" android:padding="12dp" android:layout_marginBottom="12dp">
+                      <TextView android:id="@+id/tvTimer3hr" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="3 Hour Cooldown: Ready" android:textColor="#FFFFFF"/>
+                      <Button android:id="@+id/btnClaim3hr" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Start Timer (Get ₹300)" android:backgroundTint="#FF9800" android:textColor="#FFFFFF" android:layout_marginTop="5dp"/>
+                  </LinearLayout>
+                  <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#0D1F3D" android:padding="12dp" android:layout_marginBottom="12dp">
+                      <TextView android:id="@+id/tvTimer24hr" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="24 Hour Cooldown: Ready" android:textColor="#FFFFFF"/>
+                      <Button android:id="@+id/btnClaim24hr" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Start Timer (Get ₹1000)" android:backgroundTint="#E91E63" android:textColor="#FFFFFF" android:layout_marginTop="5dp"/>
+                  </LinearLayout>
+              </LinearLayout>
+              <TextView android:id="@+id/tvMahaulText" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Mahaul Text Loading..." android:textColor="#CFD8DC" android:gravity="center" android:layout_above="@+id/btnBackToHome" android:layout_marginBottom="15dp" android:textStyle="bold"/>
+              <Button android:id="@+id/btnBackToHome" android:layout_width="match_parent" android:layout_height="50dp" android:text="CLOSE VAULT & RETURN" android:backgroundTint="#78909C" android:textColor="#000000" android:layout_alignParentBottom="true"/>
+          </RelativeLayout>
+          EOF
+
+          # TRADING ARENA
+          cat << 'EOF' > app/src/main/res/layout/activity_trading.xml
+          <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:background="#020611" android:padding="16dp">
+              <TextView android:id="@+id/tvTradingWallet" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Wallet: ₹10000" android:textColor="#FFFFFF" android:textSize="18sp"/>
+              <TextView android:id="@+id/tvLivePrice" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="₹100.00" android:textColor="#00FF00" android:textSize="24sp" android:textStyle="bold" android:layout_alignParentRight="true"/>
+              <com.zatomic.tradinggame.CustomGraphView android:id="@+id/customGraphView" android:layout_width="match_parent" android:layout_height="250dp" android:layout_centerInParent="true" android:background="#0D1F3D"/>
+              <TextView android:id="@+id/tvCountdown" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Clock: Standby" android:textColor="#FFEB3B" android:layout_above="@id/customGraphView" android:layout_centerHorizontal="true" android:layout_marginBottom="10dp"/>
+              <LinearLayout android:id="@+id/betAmountLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:weightSum="3" android:layout_above="@+id/btnLayout" android:layout_marginBottom="15dp">
+                  <Button android:id="@+id/btnAmt10" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="₹10" android:backgroundTint="#223344"/>
+                  <Button android:id="@+id/btnAmt50" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="₹50" android:backgroundTint="#223344"/>
+                  <Button android:id="@+id/btnAmt100" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="₹100" android:backgroundTint="#223344"/>
+              </LinearLayout>
+              <LinearLayout android:id="@+id/btnLayout" android:layout_width="match_parent" android:layout_height="55dp" android:orientation="horizontal" android:weightSum="2" android:layout_alignParentBottom="true">
+                  <Button android:id="@+id/btnUp" android:layout_width="0dp" android:layout_weight="1" android:layout_height="match_parent" android:text="UP 🟢" android:backgroundTint="#4CAF50"/>
+                  <Button android:id="@+id/btnDown" android:layout_width="0dp" android:layout_weight="1" android:layout_height="match_parent" android:text="DOWN 🔴" android:backgroundTint="#F44336" android:layout_marginStart="10dp"/>
+              </LinearLayout>
+          </RelativeLayout>
+          EOF
+
+      - name: "Step 6: Core Engine Logic & 15-Sec Animation System"
+        run: |
+          cat << 'EOF' > app/build.gradle
+          plugins { id 'com.android.application'; id 'org.jetbrains.kotlin.android' }
+          android {
+              namespace 'com.zatomic.tradinggame'
+              compileSdk 34
+              defaultConfig {
+                  applicationId 'com.zatomic.tradinggame'
+                  minSdk 26
+                  targetSdk 34
+                  versionCode 8
+                  versionName "8.0-Ultimate-Fish-Edition"
+              }
+              buildTypes { release { minifyEnabled false } }
+              compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
+              kotlinOptions { jvmTarget = '17' }
+          }
+          dependencies {
+              implementation 'androidx.appcompat:appcompat:1.6.1'
+              implementation 'com.google.android.material:material:1.11.0'
+              implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
+          }
+          EOF
+
+          # 1. 3D ISLAND ENGINE & 15 SEC FLYING FISH MATHEMATICS
+          cat << 'EOF' > app/src/main/java/com/zatomic/tradinggame/CinematicWorldView.kt
+          package com.zatomic.tradinggame
+          import android.content.Context
+          import android.graphics.*
+          import android.util.AttributeSet
+          import android.view.MotionEvent
+          import android.view.View
+          import kotlin.math.sin
+
+          class CinematicWorldView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
+              var floorCount = 1
+              private var rotationAngle = 0f
+              private var previousX = 0f
+
+              // 15-Second Fish Animation Logic
+              private var fishTimeProgress = 0f
+              private val animationDuration = 100f // Frames it takes to cross the screen
+              private var isFishFlying = false
+              private var lastJumpTime = System.currentTimeMillis()
+
+              private val paintSky = Paint().apply { isAntiAlias = true }
+              private val paintWater = Paint().apply { color = Color.parseColor("#0F4B99"); style = Paint.Style.FILL; isAntiAlias = true }
+              private val paintIsland = Paint().apply { color = Color.parseColor("#2E7D32"); style = Paint.Style.FILL; isAntiAlias = true }
+              private val paintFish = Paint().apply { color = Color.parseColor("#FF9800"); style = Paint.Style.FILL; isAntiAlias = true } // Orange glowing fish
+
+              override fun onTouchEvent(event: MotionEvent): Boolean {
+                  val x = event.x
+                  if (event.action == MotionEvent.ACTION_MOVE) {
+                      rotationAngle += (x - previousX) * 0.5f // Rotate world
+                      invalidate()
+                  }
+                  previousX = x
+                  return true
+              }
+
+              override fun onDraw(canvas: Canvas) {
+                  super.onDraw(canvas)
+                  val cx = width / 2f
+                  val cy = height / 2f + 150f
+
+                  // 1. SKY 
+                  val skyGrad = LinearGradient(0f, 0f, 0f, height.toFloat(), Color.parseColor("#051024"), Color.parseColor("#1B2A4A"), Shader.TileMode.CLAMP)
+                  paintSky.shader = skyGrad
+                  canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), paintSky)
+
+                  // 2. 3D OCEAN WATER
+                  canvas.drawRect(0f, cy, width.toFloat(), height.toFloat(), paintWater)
+
+                  // 3. 3D ISLAND DISK
+                  canvas.drawOval(cx - 280f, cy - 80f, cx + 280f, cy + 80f, paintIsland)
+
+                  // 4. COLORFUL TOWER BUILDER (Dependent on Floors)
+                  val towerWidth = 100f
+                  val floorHeight = 40f
+                  for (i in 0 until floorCount) {
+                      val bottomY = cy - 20f - (i * floorHeight)
+                      val topY = bottomY - floorHeight
+                      val rect = RectF(cx - towerWidth / 2f, topY, cx + towerWidth / 2f, bottomY)
+
+                      val pTower = Paint().apply {
+                          color = when (i % 4) {
+                              0 -> Color.parseColor("#00E5FF") // Cyan
+                              1 -> Color.parseColor("#FFD700") // Gold
+                              2 -> Color.parseColor("#00E676") // Green
+                              else -> Color.parseColor("#E91E63") // Pink
+                          }
+                          style = Paint.Style.FILL
+                          isAntiAlias = true
+                      }
+                      canvas.drawRect(rect, pTower)
+                      
+                      // 3D Shadow detail
+                      val pShadow = Paint().apply { color = Color.parseColor("#44000000"); style = Paint.Style.FILL }
+                      canvas.drawRect(cx, topY, cx + towerWidth / 2f, bottomY, pShadow)
+                  }
+
+                  // 5. THE 15-SECOND FISH JUMP ENGINE (Parabolic Arc OVER the tower)
+                  val now = System.currentTimeMillis()
+                  if (!isFishFlying && now - lastJumpTime > 15000) { // EXCATLY 15 SECONDS TRIGGER
+                      isFishFlying = true
+                      fishTimeProgress = 0f
+                  }
+
+                  if (isFishFlying) {
+                      fishTimeProgress += 1.5f // Speed of fish
+                      if (fishTimeProgress > animationDuration) {
+                          isFishFlying = false
+                          lastJumpTime = System.currentTimeMillis() // Reset timer
+                      } else {
+                          val normTime = fishTimeProgress / animationDuration
+                          val fishX = (normTime * (width + 300f)) - 150f
+                          
+                          // MATH: Parabola that always clears the TOP of the highest tower floor
+                          val towerTopY = cy - 20f - (floorCount * floorHeight)
+                          val clearance = 100f // 100 pixels above the top floor
+                          val peakY = towerTopY - clearance
+                          
+                          // Calculate arc
+                          val heightDelta = cy - peakY
+                          val fishY = cy - (sin(normTime * Math.PI) * heightDelta).toFloat()
+
+                          // Draw Fish Body
+                          canvas.drawOval(fishX - 30f, fishY - 15f, fishX + 30f, fishY + 15f, paintFish)
+                          // Draw Fish Tail
+                          val tail = Path().apply {
+                              moveTo(fishX - 25f, fishY)
+                              lineTo(fishX - 50f, fishY - 20f)
+                              lineTo(fishX - 50f, fishY + 20f)
+                              close()
+                          }
+                          canvas.drawPath(tail, paintFish)
+                      }
+                  }
+
+                  invalidate() // Request next frame for smooth animation
+              }
+          }
+          EOF
+
+          # 2. CUSTOM GRAPH VIEW
+          cat << 'EOF' > app/src/main/java/com/zatomic/tradinggame/CustomGraphView.kt
+          package com.zatomic.tradinggame
+          import android.content.Context
+          import android.graphics.*
+          import android.util.AttributeSet
+          import android.view.View
+
+          class CustomGraphView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
+              private val points = mutableListOf<Float>()
+              private val paintLine = Paint().apply { color = Color.GREEN; style = Paint.Style.STROKE; strokeWidth = 5f; isAntiAlias = true }
+              fun addPricePoint(price: Float) {
+                  if (points.size > 25) points.removeAt(0)
+                  points.add(price)
+                  invalidate()
+              }
+              override fun onDraw(canvas: Canvas) {
+                  super.onDraw(canvas)
+                  if (points.size < 2) return
+                  val max = points.maxOrNull() ?: 100f
+                  val min = points.minOrNull() ?: 0f
+                  val range = if (max == min) 1f else (max - min)
+                  val stepX = width.toFloat() / (points.size - 1)
+                  val path = Path()
+                  for (i in points.indices) {
+                      val x = i * stepX
+                      val y = height - (((points[i] - min) / range) * (height - 40f) + 20f)
+                      if (i == 0) path.moveTo(x, y) else path.lineTo(x, y)
+                  }
+                  paintLine.color = if (points.last() >= points[points.size - 2]) Color.GREEN else Color.RED
+                  canvas.drawPath(path, paintLine)
+              }
+          }
+          EOF
+
+          # 3. MAIN ACTIVITY (Dashboard)
+          cat << 'EOF' > app/src/main/java/com/zatomic/tradinggame/MainActivity.kt
+          package com.zatomic.tradinggame
+          import android.content.Context
+          import android.content.Intent
+          import android.os.Bundle
+          import android.widget.Button
+          import android.widget.ImageView
+          import android.widget.TextView
+          import android.widget.Toast
+          import androidx.appcompat.app.AppCompatActivity
+
+          class MainActivity : AppCompatActivity() {
+              private lateinit var tvWallet: TextView
+              private lateinit var tvTowerFloor: TextView
+              private lateinit var worldView: CinematicWorldView
+              private var balance = 10000
+              private var towerFloor = 1
+
+              override fun onCreate(savedInstanceState: Bundle?) {
+                  super.onCreate(savedInstanceState)
+                  setContentView(R.layout.activity_main)
+
+                  tvWallet = findViewById(R.id.tvWallet)
+                  tvTowerFloor = findViewById(R.id.tvTowerFloor)
+                  worldView = findViewById(R.id.cinematicWorldView)
+
+                  findViewById<ImageView>(R.id.btnOpenWalletSettings).setOnClickListener {
+                      startActivity(Intent(this, WalletSettingsActivity::class.java))
+                  }
+
+                  findViewById<Button>(R.id.btnUpgradeTower).setOnClickListener {
+                      val cost = towerFloor * 500
+                      if (balance < cost) {
+                          Toast.makeText(this, "Need ₹$cost to construct next floor!", Toast.LENGTH_SHORT).show()
+                          return@setOnClickListener
+                      }
+                      balance -= cost
+                      towerFloor++
+                      getSharedPreferences("TradingGamePrefs", Context.MODE_PRIVATE).edit()
+                          .putInt("wallet_balance", balance)
+                          .putInt("tower_floor", towerFloor).apply()
+                      syncUI()
+                  }
+
+                  findViewById<Button>(R.id.btnOpenMarket).setOnClickListener {
+                      startActivity(Intent(this, TradingActivity::class.java))
+                  }
+              }
+
+              override fun onResume() {
+                  super.onResume()
+                  val prefs = getSharedPreferences("TradingGamePrefs", Context.MODE_PRIVATE)
+                  balance = prefs.getInt("wallet_balance", 10000)
+                  towerFloor = prefs.getInt("tower_floor", 1)
+                  syncUI()
+              }
+
+              private fun syncUI() {
+                  tvWallet.text = "Balance: ₹$balance"
+                  tvTowerFloor.text = "Island Tower: Level $towerFloor"
+                  findViewById<Button>(R.id.btnUpgradeTower).text = "Build Floor ${towerFloor + 1} (Cost: ₹${towerFloor * 500})"
+                  worldView.floorCount = towerFloor
+                  worldView.invalidate()
+              }
+          }
+          EOF
+
+          # 4. WALLET SETTINGS ACTIVITY (Offline Hub)
+          cat << 'EOF' > app/src/main/java/com/zatomic/tradinggame/WalletSettingsActivity.kt
+          package com.zatomic.tradinggame
+          import android.content.Context
+          import android.os.Bundle
+          import android.widget.Button
+          import android.widget.TextView
+          import android.widget.Toast
+          import androidx.appcompat.app.AppCompatActivity
+          import kotlinx.coroutines.*
+
+          class WalletSettingsActivity : AppCompatActivity() {
+              private lateinit var tvBalance: TextView
+              private var balance = 10000
+              private var towerFloor = 1
+              private var job: Job? = null
+
+              override fun onCreate(savedInstanceState: Bundle?) {
+                  super.onCreate(savedInstanceState)
+                  setContentView(R.layout.activity_wallet_settings)
+                  
+                  tvBalance = findViewById(R.id.tvCurrentBalance)
+                  val prefs = getSharedPreferences("TradingGamePrefs", Context.MODE_PRIVATE)
+                  balance = prefs.getInt("wallet_balance", 10000)
+                  towerFloor = prefs.getInt("tower_floor", 1)
+                  tvBalance.text = "Funds: ₹$balance"
+
+                  setupBtn(R.id.btnClaim1hr, "t_1h", 3600, 100)
+                  setupBtn(R.id.btnClaim3hr, "t_3h", 10800, 300)
+                  setupBtn(R.id.btnClaim24hr, "t_24h", 86400, 1000)
+
+                  findViewById<Button>(R.id.btnBackToHome).setOnClickListener { finish() }
+
+                  job = CoroutineScope(Dispatchers.Main).launch {
+                      while(true) {
+                          val now = System.currentTimeMillis()
+                          updateLabel("t_1h", now, findViewById(R.id.tvTimer1hr), findViewById(R.id.btnClaim1hr), "1 Hour", 100)
+                          updateLabel("t_3h", now, findViewById(R.id.tvTimer3hr), findViewById(R.id.btnClaim3hr), "3 Hour", 300)
+                          updateLabel("t_24h", now, findViewById(R.id.tvTimer24hr), findViewById(R.id.btnClaim24hr), "24 Hour", 1000)
+                          findViewById<TextView>(R.id.tvMahaulText).text = "Mahaul Status: Level $towerFloor Tower is Safe."
+                          delay(1000)
+                      }
+                  }
+              }
+
+              private fun setupBtn(id: Int, key: String, secs: Long, prize: Int) {
+                  findViewById<Button>(id).setOnClickListener {
+                      val prefs = getSharedPreferences("TradingGamePrefs", Context.MODE_PRIVATE)
+                      val target = prefs.getLong(key, 0L)
+                      val now = System.currentTimeMillis()
+                      if (target == 0L) {
+                          prefs.edit().putLong(key, now + (secs * 1000)).apply()
+                          Toast.makeText(this, "Timer Started!", Toast.LENGTH_SHORT).show()
+                      } else if (now >= target) {
+                          balance += prize
+                          prefs.edit().putLong(key, 0L).putInt("wallet_balance", balance).apply()
+                          tvBalance.text = "Funds: ₹$balance"
+                          Toast.makeText(this, "Claimed ₹$prize!", Toast.LENGTH_SHORT).show()
+                      }
+                  }
+              }
+
+              private fun updateLabel(key: String, now: Long, tv: TextView, btn: Button, name: String, p: Int) {
+                  val target = getSharedPreferences("TradingGamePrefs", Context.MODE_PRIVATE).getLong(key, 0L)
+                  if (target == 0L) {
+                      tv.text = "$name: Ready"; btn.text = "Start Timer (Get ₹$p)"
+                  } else if (now >= target) {
+                      tv.text = "$name: Finished!"; btn.text = "Claim ₹$p NOW!"
+                  } else {
+                      val diff = (target - now) / 1000
+                      tv.text = String.format("%s: %02d:%02d:%02d left", name, diff / 3600, (diff % 3600) / 60, diff % 60)
+                      btn.text = "LOCKED"
+                  }
+              }
+
+              override fun onDestroy() { super.onDestroy(); job?.cancel() }
+          }
+          EOF
+
+          # 5. TRADING ACTIVITY
+          cat << 'EOF' > app/src/main/java/com/zatomic/tradinggame/TradingActivity.kt
+          package com.zatomic.tradinggame
+          import android.content.Context
+          import android.graphics.Color
+          import android.os.Bundle
+          import android.widget.Button
+          import android.widget.TextView
+          import android.widget.Toast
+          import androidx.appcompat.app.AppCompatActivity
+          import kotlinx.coroutines.*
+          import java.util.Random
+
+          class TradingActivity : AppCompatActivity() {
+              private var bal = 10000; private var price = 100f; private var bet = 10; private var isTrade = false
+              private lateinit var tvBal: TextView; private lateinit var tvP: TextView; private lateinit var tvT: TextView
+              private lateinit var g: CustomGraphView; private var job: Job? = null
+
+              override fun onCreate(savedInstanceState: Bundle?) {
+                  super.onCreate(savedInstanceState)
+                  setContentView(R.layout.activity_trading)
+                  tvBal = findViewById(R.id.tvTradingWallet); tvP = findViewById(R.id.tvLivePrice)
+                  tvT = findViewById(R.id.tvCountdown); g = findViewById(R.id.customGraphView)
+                  
+                  bal = getSharedPreferences("TradingGamePrefs", Context.MODE_PRIVATE).getInt("wallet_balance", 10000)
+                  tvBal.text = "Wallet: ₹$bal"
+
+                  findViewById<Button>(R.id.btnAmt10).setOnClickListener { bet = 10 }
+                  findViewById<Button>(R.id.btnAmt50).setOnClickListener { bet = 50 }
+                  findViewById<Button>(R.id.btnAmt100).setOnClickListener { bet = 100 }
+
+                  job = CoroutineScope(Dispatchers.Main).launch {
+                      while(true) {
+                          val d = (Random().nextFloat() * 4f) - 2f
+                          price += d
+                          tvP.text = String.format("₹%.2f", price); tvP.setTextColor(if(d>=0) Color.GREEN else Color.RED)
+                          g.addPricePoint(price)
+                          delay(1000)
+                      }
+                  }
+
+                  findViewById<Button>(R.id.btnUp).setOnClickListener { trade("UP") }
+                  findViewById<Button>(R.id.btnDown).setOnClickListener { trade("DOWN") }
+              }
+
+              private fun trade(type: String) {
+                  if (isTrade || bal < bet) return
+                  bal -= bet; tvBal.text = "Wallet: ₹$bal"; isTrade = true
+                  val sp = price
+                  CoroutineScope(Dispatchers.Main).launch {
+                      for(i in 5 downTo 1) { tvT.text = "Expiry: ${i}s"; delay(1000) }
+                      if((type=="UP" && price>sp) || (type=="DOWN" && price<sp)) { bal += bet*2; Toast.makeText(this@TradingActivity, "WIN!", Toast.LENGTH_SHORT).show() }
+                      getSharedPreferences("TradingGamePrefs", Context.MODE_PRIVATE).edit().putInt("wallet_balance", bal).apply()
+                      tvBal.text = "Wallet: ₹$bal"; isTrade = false; tvT.text = "Clock: Standby"
+                  }
+              }
+              override fun onDestroy() { super.onDestroy(); job?.cancel() }
+          }
+          EOF
+
+          # MANIFEST
+          cat << 'EOF' > app/src/main/AndroidManifest.xml
+          <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+              <application android:label="VIP Trading World" android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher_round" android:theme="@style/Theme.TradingGame">
+                  <activity android:name=".MainActivity" android:exported="true">
+                      <intent-filter>
+                          <action android:name="android.intent.action.MAIN" />
+                          <category android:name="android.intent.category.LAUNCHER" />
+                      </intent-filter>
+                  </activity>
+                  <activity android:name=".WalletSettingsActivity" android:exported="false" />
+                  <activity android:name=".TradingActivity" android:exported="false" />
+              </application>
+          </manifest>
+          EOF
+
+      - name: "Step 7: Build Standalone APK"
+        run: |
+          chmod +x gradlew
+          ./gradlew :app:assembleDebug
+
+      - name: "Step 8: Upload Final APK"
+        uses: actions/upload-artifact@v4
+        with:
+          name: "Trading-Tower-Fish-Engine"
+          path: app/build/outputs/apk/debug/app-debug.apk
+
