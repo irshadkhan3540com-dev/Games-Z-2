@@ -1,4 +1,4 @@
-name: "Ultimate 3D Cinematic Tower & Trading Engine"
+name: "Ultimate 3D Cinematic Tower & Trading Engine - FULL 3D REBUILD"
 
 on:
   push:
@@ -43,12 +43,11 @@ jobs:
           android.useAndroidX=true
           org.gradle.jvmargs=-Xmx4g -Dfile.encoding=UTF-8
           EOF
-          
+
           gradle wrapper --gradle-version 8.4 --distribution-type bin
 
       - name: "Step 5: App UI XMLs & Layouts"
         run: |
-          # Colors and Themes
           cat << 'EOF' > app/src/main/res/values/colors.xml
           <?xml version="1.0" encoding="utf-8"?><resources><color name="black">#000000</color><color name="white">#FFFFFF</color></resources>
           EOF
@@ -56,100 +55,225 @@ jobs:
           <resources><style name="Theme.TradingGame" parent="Theme.AppCompat.Light.NoActionBar"/></resources>
           EOF
 
-          # Icons
           cat << 'EOF' > app/src/main/res/drawable/ic_plus_circle.xml
           <vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="24dp" android:height="24dp" android:viewportWidth="24" android:viewportHeight="24">
               <path android:fillColor="#FFD700" android:pathData="M12,2C6.48,2 2,6.48 2,12s4.48,10 10,10 10,-4.48 10,-10S17.52,2 12,2zM17,13h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>
           </vector>
           EOF
+
           cat << 'EOF' > app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
           <?xml version="1.0" encoding="utf-8"?><adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android"><background android:drawable="@android:color/black"/><foreground android:drawable="@drawable/ic_plus_circle"/></adaptive-icon>
           EOF
 
-          # MAIN DASHBOARD (Cinematic View) - NO CHANGES REMOVED
+          # MAIN DASHBOARD - 3D World View
           cat << 'EOF' > app/src/main/res/layout/activity_main.xml
-          <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:background="#020813">
-              <LinearLayout android:id="@+id/walletHeader" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_alignParentTop="true" android:layout_centerHorizontal="true" android:background="#0D1F3D" android:padding="12dp" android:layout_marginTop="16dp" android:elevation="5dp">
-                  <TextView android:id="@+id/tvWallet" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Balance: ₹10000" android:textColor="#FFD700" android:textSize="20sp" android:textStyle="bold"/>
-                  <ImageView android:id="@+id/btnOpenWalletSettings" android:layout_width="26dp" android:layout_height="26dp" android:src="@drawable/ic_plus_circle" android:layout_marginStart="10dp"/>
-              </LinearLayout>
-              <TextView android:id="@+id/tvTowerFloor" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Island Tower: Level 1" android:textColor="#00E5FF" android:textSize="15sp" android:layout_below="@id/walletHeader" android:layout_centerHorizontal="true" android:layout_marginTop="6dp"/>
-              
-              <com.zatomic.tradinggame.CinematicWorldView android:id="@+id/cinematicWorldView" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_below="@id/tvTowerFloor" android:layout_above="@+id/controlBase"/>
+          <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent" android:layout_height="match_parent"
+              android:background="#010811">
 
-              <LinearLayout android:id="@+id/controlBase" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_alignParentBottom="true" android:padding="12dp" android:background="#99000000">
-                  <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Touch and Swipe: Rotate Island | Fish jumps every 15s" android:textColor="#A0AAB5" android:textSize="12sp" android:layout_gravity="center" android:layout_marginBottom="6dp"/>
-                  <Button android:id="@+id/btnUpgradeTower" android:layout_width="match_parent" android:layout_height="50dp" android:text="Build New Floor Level" android:backgroundTint="#FF9800" android:textColor="#FFFFFF" android:layout_marginBottom="6dp"/>
-                  <Button android:id="@+id/btnOpenMarket" android:layout_width="match_parent" android:layout_height="60dp" android:text="ENTER SECURE TRADING ZONE" android:textSize="15sp" android:textStyle="bold" android:backgroundTint="#00E676" android:textColor="#000000"/>
+              <LinearLayout android:id="@+id/walletHeader"
+                  android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:orientation="horizontal" android:gravity="center_vertical"
+                  android:layout_alignParentTop="true"
+                  android:background="#CC050F1F" android:padding="12dp"
+                  android:elevation="8dp">
+                  <TextView android:id="@+id/tvWallet"
+                      android:layout_width="0dp" android:layout_weight="1"
+                      android:layout_height="wrap_content"
+                      android:text="Balance: Rs.10000" android:textColor="#FFD700"
+                      android:textSize="20sp" android:textStyle="bold"/>
+                  <TextView android:id="@+id/tvTowerFloor"
+                      android:layout_width="wrap_content" android:layout_height="wrap_content"
+                      android:text="Level 1" android:textColor="#00E5FF" android:textSize="14sp"
+                      android:layout_marginEnd="12dp"/>
+                  <ImageView android:id="@+id/btnOpenWalletSettings"
+                      android:layout_width="30dp" android:layout_height="30dp"
+                      android:src="@drawable/ic_plus_circle"/>
+              </LinearLayout>
+
+              <com.zatomic.tradinggame.CinematicWorldView
+                  android:id="@+id/cinematicWorldView"
+                  android:layout_width="match_parent" android:layout_height="match_parent"
+                  android:layout_below="@id/walletHeader"
+                  android:layout_above="@+id/controlBase"/>
+
+              <LinearLayout android:id="@+id/controlBase"
+                  android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:orientation="vertical" android:layout_alignParentBottom="true"
+                  android:padding="14dp" android:background="#DD010811" android:elevation="8dp">
+                  <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                      android:text="Swipe to Rotate 3D Island  |  Fish jumps every 15s"
+                      android:textColor="#7090B0" android:textSize="11sp"
+                      android:layout_gravity="center" android:layout_marginBottom="8dp"/>
+                  <Button android:id="@+id/btnUpgradeTower"
+                      android:layout_width="match_parent" android:layout_height="50dp"
+                      android:text="Build New Floor Level"
+                      android:backgroundTint="#FF6F00" android:textColor="#FFFFFF"
+                      android:layout_marginBottom="8dp"/>
+                  <Button android:id="@+id/btnOpenMarket"
+                      android:layout_width="match_parent" android:layout_height="60dp"
+                      android:text="ENTER SECURE TRADING ZONE"
+                      android:textSize="15sp" android:textStyle="bold"
+                      android:backgroundTint="#00C853" android:textColor="#000000"/>
               </LinearLayout>
           </RelativeLayout>
           EOF
 
-          # OFFLINE TIME CLAIM HUB - NO CHANGES REMOVED
+          # OFFLINE TIME CLAIM HUB
           cat << 'EOF' > app/src/main/res/layout/activity_wallet_settings.xml
-          <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:background="#020813" android:padding="16dp">
-              <TextView android:id="@+id/tvTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="OFFLINE TIME CLAIM HUB" android:textColor="#00E5FF" android:textSize="22sp" android:textStyle="bold" android:layout_centerHorizontal="true" android:layout_marginTop="10dp"/>
-              <TextView android:id="@+id/tvCurrentBalance" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Funds: ₹10000" android:textColor="#FFD700" android:textSize="18sp" android:layout_below="@id/tvTitle" android:layout_centerHorizontal="true" android:layout_marginTop="5dp"/>
-              
-              <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_below="@id/tvCurrentBalance" android:layout_marginTop="25dp">
-                  <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#0D1F3D" android:padding="12dp" android:layout_marginBottom="12dp">
-                      <TextView android:id="@+id/tvTimer1hr" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="1 Hour Cooldown: Ready" android:textColor="#FFFFFF"/>
-                      <Button android:id="@+id/btnClaim1hr" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Start Timer (Get ₹100)" android:backgroundTint="#00E676" android:textColor="#000000" android:layout_marginTop="5dp"/>
+          <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent" android:layout_height="match_parent"
+              android:background="#020813" android:padding="16dp">
+              <TextView android:id="@+id/tvTitle"
+                  android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:text="OFFLINE TIME CLAIM HUB" android:textColor="#00E5FF"
+                  android:textSize="22sp" android:textStyle="bold"
+                  android:layout_centerHorizontal="true" android:layout_marginTop="10dp"/>
+              <TextView android:id="@+id/tvCurrentBalance"
+                  android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:text="Funds: Rs.10000" android:textColor="#FFD700" android:textSize="18sp"
+                  android:layout_below="@id/tvTitle" android:layout_centerHorizontal="true"
+                  android:layout_marginTop="5dp"/>
+              <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:orientation="vertical"
+                  android:layout_below="@id/tvCurrentBalance" android:layout_marginTop="25dp">
+                  <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:orientation="vertical" android:background="#0D1F3D"
+                      android:padding="12dp" android:layout_marginBottom="12dp">
+                      <TextView android:id="@+id/tvTimer1hr" android:layout_width="wrap_content"
+                          android:layout_height="wrap_content" android:text="1 Hour Cooldown: Ready"
+                          android:textColor="#FFFFFF"/>
+                      <Button android:id="@+id/btnClaim1hr" android:layout_width="match_parent"
+                          android:layout_height="wrap_content" android:text="Start Timer (Get Rs.100)"
+                          android:backgroundTint="#00E676" android:textColor="#000000"
+                          android:layout_marginTop="5dp"/>
                   </LinearLayout>
-                  <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#0D1F3D" android:padding="12dp" android:layout_marginBottom="12dp">
-                      <TextView android:id="@+id/tvTimer3hr" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="3 Hour Cooldown: Ready" android:textColor="#FFFFFF"/>
-                      <Button android:id="@+id/btnClaim3hr" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Start Timer (Get ₹300)" android:backgroundTint="#FF9800" android:textColor="#FFFFFF" android:layout_marginTop="5dp"/>
+                  <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:orientation="vertical" android:background="#0D1F3D"
+                      android:padding="12dp" android:layout_marginBottom="12dp">
+                      <TextView android:id="@+id/tvTimer3hr" android:layout_width="wrap_content"
+                          android:layout_height="wrap_content" android:text="3 Hour Cooldown: Ready"
+                          android:textColor="#FFFFFF"/>
+                      <Button android:id="@+id/btnClaim3hr" android:layout_width="match_parent"
+                          android:layout_height="wrap_content" android:text="Start Timer (Get Rs.300)"
+                          android:backgroundTint="#FF9800" android:textColor="#FFFFFF"
+                          android:layout_marginTop="5dp"/>
                   </LinearLayout>
-                  <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#0D1F3D" android:padding="12dp" android:layout_marginBottom="12dp">
-                      <TextView android:id="@+id/tvTimer24hr" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="24 Hour Cooldown: Ready" android:textColor="#FFFFFF"/>
-                      <Button android:id="@+id/btnClaim24hr" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Start Timer (Get ₹1000)" android:backgroundTint="#E91E63" android:textColor="#FFFFFF" android:layout_marginTop="5dp"/>
+                  <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:orientation="vertical" android:background="#0D1F3D"
+                      android:padding="12dp" android:layout_marginBottom="12dp">
+                      <TextView android:id="@+id/tvTimer24hr" android:layout_width="wrap_content"
+                          android:layout_height="wrap_content" android:text="24 Hour Cooldown: Ready"
+                          android:textColor="#FFFFFF"/>
+                      <Button android:id="@+id/btnClaim24hr" android:layout_width="match_parent"
+                          android:layout_height="wrap_content" android:text="Start Timer (Get Rs.1000)"
+                          android:backgroundTint="#E91E63" android:textColor="#FFFFFF"
+                          android:layout_marginTop="5dp"/>
                   </LinearLayout>
               </LinearLayout>
-              <TextView android:id="@+id/tvMahaulText" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Mahaul Text Loading..." android:textColor="#CFD8DC" android:gravity="center" android:layout_above="@+id/btnBackToHome" android:layout_marginBottom="15dp" android:textStyle="bold"/>
-              <Button android:id="@+id/btnBackToHome" android:layout_width="match_parent" android:layout_height="50dp" android:text="CLOSE VAULT AND RETURN" android:backgroundTint="#78909C" android:textColor="#000000" android:layout_alignParentBottom="true"/>
+              <TextView android:id="@+id/tvMahaulText" android:layout_width="match_parent"
+                  android:layout_height="wrap_content" android:text="Mahaul Text Loading..."
+                  android:textColor="#CFD8DC" android:gravity="center"
+                  android:layout_above="@+id/btnBackToHome" android:layout_marginBottom="15dp"
+                  android:textStyle="bold"/>
+              <Button android:id="@+id/btnBackToHome" android:layout_width="match_parent"
+                  android:layout_height="50dp" android:text="CLOSE VAULT AND RETURN"
+                  android:backgroundTint="#78909C" android:textColor="#000000"
+                  android:layout_alignParentBottom="true"/>
           </RelativeLayout>
           EOF
 
-          # TRADING ARENA - UPGRADED TO MATCH IMAGE (PRO CANDLESTICK UI)
+          # TRADING ARENA - PRO CANDLESTICK UI
           cat << 'EOF' > app/src/main/res/layout/activity_trading.xml
-          <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:background="#090E17" android:padding="16dp">
-              
-              <!-- Pro Trading Info Header (Like Image 1) -->
-              <LinearLayout android:id="@+id/headerPro" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
-                  <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:weightSum="2">
-                      <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="SPY  5m" android:textColor="#00FF00" android:textSize="20sp" android:textStyle="bold"/>
-                      <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="LIVE EST" android:textColor="#FFEB3B" android:textSize="16sp" android:gravity="end"/>
+          <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent" android:layout_height="match_parent"
+              android:background="#060D18" android:padding="14dp">
+              <LinearLayout android:id="@+id/headerPro"
+                  android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:orientation="vertical">
+                  <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:orientation="horizontal" android:weightSum="2">
+                      <TextView android:layout_width="0dp" android:layout_weight="1"
+                          android:layout_height="wrap_content" android:text="SPY  5m"
+                          android:textColor="#00FF88" android:textSize="20sp" android:textStyle="bold"/>
+                      <TextView android:layout_width="0dp" android:layout_weight="1"
+                          android:layout_height="wrap_content" android:text="LIVE EST"
+                          android:textColor="#FFEB3B" android:textSize="16sp" android:gravity="end"/>
                   </LinearLayout>
-                  <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="SPDR S&amp;P 500 ETF" android:textColor="#B0BEC5" android:textSize="12sp"/>
-                  <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="4dp">
-                      <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="EMA 21" android:textColor="#FFC107" android:textSize="12sp" android:textStyle="bold" android:layout_marginEnd="8dp"/>
-                      <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="EMA 9" android:textColor="#03A9F4" android:textSize="12sp" android:textStyle="bold"/>
+                  <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                      android:text="SPDR S&amp;P 500 ETF Trust" android:textColor="#607D8B"
+                      android:textSize="12sp"/>
+                  <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:orientation="horizontal" android:layout_marginTop="4dp">
+                      <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                          android:text="EMA 21" android:textColor="#FFC107" android:textSize="12sp"
+                          android:textStyle="bold" android:layout_marginEnd="10dp"/>
+                      <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                          android:text="EMA 9" android:textColor="#03A9F4" android:textSize="12sp"
+                          android:textStyle="bold"/>
                   </LinearLayout>
               </LinearLayout>
-
-              <TextView android:id="@+id/tvLivePrice" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="₹100.00" android:textColor="#00FF00" android:textSize="28sp" android:textStyle="bold" android:layout_below="@id/headerPro" android:layout_alignParentRight="true" android:layout_marginTop="10dp" android:background="#1A00FF00" android:padding="4dp"/>
-              
-              <!-- Upgraded Candlestick Graph View -->
-              <com.zatomic.tradinggame.CustomGraphView android:id="@+id/customGraphView" android:layout_width="match_parent" android:layout_height="320dp" android:layout_below="@id/tvLivePrice" android:layout_marginTop="10dp" android:background="#050A11"/>
-              
-              <TextView android:id="@+id/tvTradingWallet" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Wallet: ₹10000" android:textColor="#FFFFFF" android:textSize="16sp" android:layout_above="@+id/betAmountLayout" android:layout_marginBottom="10dp"/>
-              <TextView android:id="@+id/tvCountdown" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Clock: Standby" android:textColor="#FFEB3B" android:layout_above="@+id/betAmountLayout" android:layout_alignParentRight="true" android:layout_marginBottom="10dp"/>
-              
-              <LinearLayout android:id="@+id/betAmountLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:weightSum="3" android:layout_above="@+id/btnLayout" android:layout_marginBottom="15dp">
-                  <Button android:id="@+id/btnAmt10" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="₹10" android:backgroundTint="#1E293B"/>
-                  <Button android:id="@+id/btnAmt50" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="₹50" android:backgroundTint="#1E293B" android:layout_marginStart="5dp" android:layout_marginEnd="5dp"/>
-                  <Button android:id="@+id/btnAmt100" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="₹100" android:backgroundTint="#1E293B"/>
+              <TextView android:id="@+id/tvLivePrice"
+                  android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:text="Rs.100.00" android:textColor="#00FF88" android:textSize="28sp"
+                  android:textStyle="bold" android:layout_below="@id/headerPro"
+                  android:layout_alignParentRight="true" android:layout_marginTop="6dp"
+                  android:background="#1A00FF00" android:padding="6dp"/>
+              <com.zatomic.tradinggame.CustomGraphView
+                  android:id="@+id/customGraphView"
+                  android:layout_width="match_parent" android:layout_height="310dp"
+                  android:layout_below="@id/tvLivePrice" android:layout_marginTop="8dp"
+                  android:background="#030810"/>
+              <TextView android:id="@+id/tvTradingWallet"
+                  android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:text="Wallet: Rs.10000" android:textColor="#ECEFF1" android:textSize="15sp"
+                  android:layout_above="@+id/betAmountLayout" android:layout_marginBottom="8dp"/>
+              <TextView android:id="@+id/tvCountdown"
+                  android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:text="Clock: Standby" android:textColor="#FFEB3B"
+                  android:layout_above="@+id/betAmountLayout"
+                  android:layout_alignParentRight="true" android:layout_marginBottom="8dp"/>
+              <LinearLayout android:id="@+id/betAmountLayout"
+                  android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:orientation="horizontal" android:weightSum="4"
+                  android:layout_above="@+id/btnLayout" android:layout_marginBottom="12dp">
+                  <Button android:id="@+id/btnAmt10" android:layout_width="0dp"
+                      android:layout_weight="1" android:layout_height="40dp"
+                      android:text="Rs.10" android:textSize="12sp" android:backgroundTint="#0D1B2A"/>
+                  <Button android:id="@+id/btnAmt50" android:layout_width="0dp"
+                      android:layout_weight="1" android:layout_height="40dp"
+                      android:text="Rs.50" android:textSize="12sp" android:backgroundTint="#0D1B2A"
+                      android:layout_marginStart="4dp" android:layout_marginEnd="4dp"/>
+                  <Button android:id="@+id/btnAmt100" android:layout_width="0dp"
+                      android:layout_weight="1" android:layout_height="40dp"
+                      android:text="Rs.100" android:textSize="12sp" android:backgroundTint="#0D1B2A"/>
+                  <Button android:id="@+id/btnAmt500" android:layout_width="0dp"
+                      android:layout_weight="1" android:layout_height="40dp"
+                      android:text="Rs.500" android:textSize="12sp" android:backgroundTint="#1A2A0D"
+                      android:layout_marginStart="4dp"/>
               </LinearLayout>
-              
-              <LinearLayout android:id="@+id/btnLayout" android:layout_width="match_parent" android:layout_height="60dp" android:orientation="horizontal" android:weightSum="2" android:layout_alignParentBottom="true">
-                  <Button android:id="@+id/btnUp" android:layout_width="0dp" android:layout_weight="1" android:layout_height="match_parent" android:text="CALL (UP) 🟢" android:backgroundTint="#00C853" android:textSize="16sp" android:textStyle="bold"/>
-                  <Button android:id="@+id/btnDown" android:layout_width="0dp" android:layout_weight="1" android:layout_height="match_parent" android:text="PUT (DOWN) 🔴" android:backgroundTint="#D50000" android:layout_marginStart="10dp" android:textSize="16sp" android:textStyle="bold"/>
+              <LinearLayout android:id="@+id/btnLayout"
+                  android:layout_width="match_parent" android:layout_height="60dp"
+                  android:orientation="horizontal" android:weightSum="2"
+                  android:layout_alignParentBottom="true">
+                  <Button android:id="@+id/btnUp"
+                      android:layout_width="0dp" android:layout_weight="1"
+                      android:layout_height="match_parent"
+                      android:text="CALL (UP)" android:backgroundTint="#00C853"
+                      android:textSize="16sp" android:textStyle="bold" android:textColor="#000000"/>
+                  <Button android:id="@+id/btnDown"
+                      android:layout_width="0dp" android:layout_weight="1"
+                      android:layout_height="match_parent"
+                      android:text="PUT (DOWN)" android:backgroundTint="#D50000"
+                      android:layout_marginStart="10dp"
+                      android:textSize="16sp" android:textStyle="bold"/>
               </LinearLayout>
           </RelativeLayout>
           EOF
 
-      - name: "Step 6: Core Engine Logic & 15-Sec Animation System"
+      - name: "Step 6: Complete 3D Engine - Core Kotlin Source Files"
         run: |
+          # â”€â”€ app/build.gradle â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
           cat << 'EOF' > app/build.gradle
           plugins { id 'com.android.application'; id 'org.jetbrains.kotlin.android' }
           android {
@@ -159,8 +283,8 @@ jobs:
                   applicationId 'com.zatomic.tradinggame'
                   minSdk 26
                   targetSdk 34
-                  versionCode 8
-                  versionName "8.0-Ultimate-Fish-Edition"
+                  versionCode 10
+                  versionName "10.0-3D-Ultimate"
               }
               buildTypes { release { minifyEnabled false } }
               compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
@@ -173,196 +297,588 @@ jobs:
           }
           EOF
 
-          # 1. 3D ISLAND ENGINE - NO CHANGES REMOVED
+          # â”€â”€ 1. CinematicWorldView.kt â€” Full 3D Isometric Engine â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
           cat << 'EOF' > app/src/main/java/com/zatomic/tradinggame/CinematicWorldView.kt
           package com.zatomic.tradinggame
+
           import android.content.Context
           import android.graphics.*
           import android.util.AttributeSet
           import android.view.MotionEvent
           import android.view.View
-          import kotlin.math.sin
+          import kotlin.math.*
 
           class CinematicWorldView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
+
+              // â”€â”€ Public state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
               var floorCount = 1
-              private var rotationAngle = 0f
-              private var previousX = 0f
 
-              // 15-Second Fish Animation Logic
-              private var fishTimeProgress = 0f
-              private val animationDuration = 100f
-              private var isFishFlying = false
-              private var lastJumpTime = System.currentTimeMillis()
+              // â”€â”€ Rotation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+              private var rotationAngle = 30f
+              private var prevX = 0f
 
-              private val paintSky = Paint().apply { isAntiAlias = true }
-              private val paintWater = Paint().apply { color = Color.parseColor("#0F4B99"); style = Paint.Style.FILL; isAntiAlias = true }
-              private val paintIsland = Paint().apply { color = Color.parseColor("#2E7D32"); style = Paint.Style.FILL; isAntiAlias = true }
-              private val paintFish = Paint().apply { color = Color.parseColor("#FF9800"); style = Paint.Style.FILL; isAntiAlias = true }
+              // â”€â”€ Frame counter (for time-based animations) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+              private var frame = 0L
 
-              override fun onTouchEvent(event: MotionEvent): Boolean {
-                  val x = event.x
-                  if (event.action == MotionEvent.ACTION_MOVE) {
-                      rotationAngle += (x - previousX) * 0.5f
-                      invalidate()
+              // â”€â”€ Stars: [xFrac, yFrac, size, twinkleSpeed] â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+              private val starData: Array<FloatArray> = Array(110) {
+                  floatArrayOf(
+                      Math.random().toFloat(),
+                      Math.random().toFloat(),
+                      (Math.random() * 2f + 0.4f).toFloat(),
+                      (Math.random() * 3f + 0.8f).toFloat()
+                  )
+              }
+
+              // â”€â”€ Clouds: [x, y, scale, speed] â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+              private val clouds = arrayOf(
+                  floatArrayOf(-120f, 70f, 0.85f, 0.35f),
+                  floatArrayOf(250f, 130f, 0.60f, 0.20f),
+                  floatArrayOf(500f, 95f, 0.70f, 0.28f)
+              )
+
+              // â”€â”€ Waves â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+              private var wavePhase = 0f
+
+              // â”€â”€ Fish animation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+              private var fishProgress = 0f
+              private var fishActive = false
+              private var lastFishTime = System.currentTimeMillis()
+
+              // â”€â”€ Particles: [x, y, vx, vy, life, maxLife, colorInt] â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+              private val particles = mutableListOf<FloatArray>()
+
+              // â”€â”€ Shared paint object â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+              private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+
+              // â”€â”€ Isometric 3D projection â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+              // wx = world X (left/right), wy = world Y (up), wz = world Z (depth)
+              // baseY = screen Y of island ground origin
+              private fun isoProject(wx: Float, wy: Float, wz: Float, cx: Float, baseY: Float): PointF {
+                  val rad = Math.toRadians(rotationAngle.toDouble())
+                  val sx = cx + ((wx * cos(rad) - wz * sin(rad)) * 0.78f).toFloat()
+                  val sy = baseY - wy + ((wx * sin(rad) + wz * cos(rad)) * 0.38f).toFloat()
+                  return PointF(sx, sy)
+              }
+
+              // â”€â”€ Build a closed Path from vararg PointF â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+              private fun makePath(vararg pts: PointF): Path = Path().apply {
+                  moveTo(pts[0].x, pts[0].y)
+                  for (i in 1 until pts.size) lineTo(pts[i].x, pts[i].y)
+                  close()
+              }
+
+              // â”€â”€ Darken / brighten a color by a factor â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+              private fun scaleColor(color: Int, f: Float): Int {
+                  val r = (Color.red(color) * f).toInt().coerceIn(0, 255)
+                  val g = (Color.green(color) * f).toInt().coerceIn(0, 255)
+                  val b = (Color.blue(color) * f).toInt().coerceIn(0, 255)
+                  return Color.argb(255, r, g, b)
+              }
+
+              // â”€â”€ Draw one isometric tower floor box â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+              private fun drawFloor(canvas: Canvas, idx: Int, cx: Float, baseY: Float) {
+                  val W = 82f          // half-width  (X axis)
+                  val D = 82f          // half-depth  (Z axis)
+                  val H = 50f          // floor height (Y axis)
+                  val bot = idx * H
+                  val top = bot + H
+
+                  // 8 corners: T=top B=bottom  F=front(+Z) B2=back(-Z)  L=left(-X) R=right(+X)
+                  val tfl = isoProject(-W, top, D, cx, baseY)
+                  val tfr = isoProject(W, top, D, cx, baseY)
+                  val tbl = isoProject(-W, top, -D, cx, baseY)
+                  val tbr = isoProject(W, top, -D, cx, baseY)
+                  val bfl = isoProject(-W, bot, D, cx, baseY)
+                  val bfr = isoProject(W, bot, D, cx, baseY)
+                  val bbl = isoProject(-W, bot, -D, cx, baseY)
+                  val bbr = isoProject(W, bot, -D, cx, baseY)
+
+                  // Color palette per floor
+                  val palettes = arrayOf(
+                      intArrayOf(0xFF00E5FF.toInt(), 0xFF006E88.toInt(), 0xFF009BB5.toInt()),
+                      intArrayOf(0xFFFFD700.toInt(), 0xFF8B6F00.toInt(), 0xFFCCA800.toInt()),
+                      intArrayOf(0xFF00E676.toInt(), 0xFF006634.toInt(), 0xFF009E50.toInt()),
+                      intArrayOf(0xFFE91E63.toInt(), 0xFF88093E.toInt(), 0xFFBB1451.toInt()),
+                      intArrayOf(0xFF7C4DFF.toInt(), 0xFF4215A0.toInt(), 0xFF6530D8.toInt()),
+                      intArrayOf(0xFFFF6D00.toInt(), 0xFF993D00.toInt(), 0xFFCC5200.toInt()),
+                      intArrayOf(0xFF76FF03.toInt(), 0xFF3E8500.toInt(), 0xFF5EC702.toInt()),
+                      intArrayOf(0xFFFF4081.toInt(), 0xFF990040.toInt(), 0xFFCC2062.toInt())
+                  )
+                  val pal = palettes[idx % palettes.size]
+                  val topC = pal[0]; val sideL = pal[1]; val sideR = pal[2]
+
+                  val rad = Math.toRadians(rotationAngle.toDouble())
+                  val sinA = sin(rad).toFloat()
+                  val cosA = cos(rad).toFloat()
+
+                  // â”€â”€ Paint helper â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+                  fun fillFace(path: Path, color: Int) {
+                      paint.style = Paint.Style.FILL
+                      paint.color = color
+                      canvas.drawPath(path, paint)
                   }
-                  previousX = x
+
+                  // â”€â”€ Draw faces backâ†’front (painter's algorithm) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+                  // Back faces (low Z / low X depending on rotation)
+                  if (cosA < 0.1f) {
+                      // back-Z face visible
+                      fillFace(makePath(tbl, tbr, bbr, bbl), scaleColor(sideL, 0.55f))
+                  }
+                  if (sinA < 0.1f) {
+                      // back-X (left) face visible
+                      fillFace(makePath(tbl, tfl, bfl, bbl), scaleColor(sideL, 0.65f))
+                  }
+                  // Front faces
+                  if (cosA > -0.1f) {
+                      // front-Z face
+                      fillFace(makePath(tfl, tfr, bfr, bfl), sideR)
+                  }
+                  if (sinA > -0.1f) {
+                      // right-X face
+                      fillFace(makePath(tfr, tbr, bbr, bfr), scaleColor(sideR, 0.80f))
+                  }
+
+                  // â”€â”€ Top face (always on top, brightest) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+                  val topPath = makePath(tfl, tfr, tbr, tbl)
+                  fillFace(topPath, topC)
+
+                  // â”€â”€ Edge outline â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+                  paint.style = Paint.Style.STROKE
+                  paint.strokeWidth = 1.2f
+                  paint.color = 0x44000000.toInt()
+                  canvas.drawPath(topPath, paint)
+                  paint.style = Paint.Style.FILL
+
+                  // â”€â”€ Glow ring on the topmost floor â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+                  if (idx == floorCount - 1) {
+                      // Simulated glow: stacked semi-transparent strokes (no BlurMaskFilter needed)
+                      for (gr in listOf(6f, 4f, 2f)) {
+                          paint.style = Paint.Style.STROKE
+                          paint.strokeWidth = gr
+                          paint.color = Color.argb((30 * (8f - gr)).toInt(), Color.red(topC), Color.green(topC), Color.blue(topC))
+                          canvas.drawPath(topPath, paint)
+                      }
+                      paint.style = Paint.Style.FILL
+                  }
+
+                  // â”€â”€ Window dots on front face â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+                  if (cosA > 0f) {
+                      val winPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                          color = Color.argb(180, 255, 255, 200)
+                          style = Paint.Style.FILL
+                      }
+                      val midFX = (tfl.x + tfr.x) / 2f
+                      val midFY = ((tfl.y + bfl.y) / 2f + (tfr.y + bfr.y) / 2f) / 2f
+                      canvas.drawCircle(midFX - 12f, midFY, 3f, winPaint)
+                      canvas.drawCircle(midFX + 12f, midFY, 3f, winPaint)
+                      canvas.drawRect(midFX - 6f, midFY + 8f, midFX + 6f, midFY + 16f, winPaint)
+                  }
+              }
+
+              // â”€â”€ Touch: rotate island â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+              override fun onTouchEvent(ev: MotionEvent): Boolean {
+                  if (ev.action == MotionEvent.ACTION_MOVE) {
+                      rotationAngle += (ev.x - prevX) * 0.65f
+                  }
+                  prevX = ev.x
                   return true
               }
 
+              // â”€â”€ Main draw â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
               override fun onDraw(canvas: Canvas) {
                   super.onDraw(canvas)
-                  val cx = width / 2f
-                  val cy = height / 2f + 150f
+                  frame++
+                  val W = width.toFloat()
+                  val H = height.toFloat()
+                  val cx = W / 2f
+                  val groundY = H * 0.62f
+                  val t = frame * 0.016f    // ~seconds at 60fps
 
-                  val skyGrad = LinearGradient(0f, 0f, 0f, height.toFloat(), Color.parseColor("#051024"), Color.parseColor("#1B2A4A"), Shader.TileMode.CLAMP)
-                  paintSky.shader = skyGrad
-                  canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), paintSky)
-                  canvas.drawRect(0f, cy, width.toFloat(), height.toFloat(), paintWater)
-                  canvas.drawOval(cx - 280f, cy - 80f, cx + 280f, cy + 80f, paintIsland)
+                  // â”€â”€ SKY GRADIENT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+                  paint.shader = LinearGradient(0f, 0f, 0f, groundY,
+                      0xFF010C20.toInt(), 0xFF0C2044.toInt(), Shader.TileMode.CLAMP)
+                  paint.style = Paint.Style.FILL
+                  canvas.drawRect(0f, 0f, W, groundY, paint)
+                  paint.shader = null
 
-                  val towerWidth = 100f
-                  val floorHeight = 40f
-                  for (i in 0 until floorCount) {
-                      val bottomY = cy - 20f - (i * floorHeight)
-                      val topY = bottomY - floorHeight
-                      val rect = RectF(cx - towerWidth / 2f, topY, cx + towerWidth / 2f, bottomY)
-
-                      val pTower = Paint().apply {
-                          color = when (i % 4) {
-                              0 -> Color.parseColor("#00E5FF")
-                              1 -> Color.parseColor("#FFD700")
-                              2 -> Color.parseColor("#00E676")
-                              else -> Color.parseColor("#E91E63")
-                          }
-                          style = Paint.Style.FILL
-                          isAntiAlias = true
+                  // â”€â”€ AURORA BOREALIS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+                  for (i in 0..4) {
+                      val aPath = Path()
+                      val baseOff = 28f + i * 22f
+                      aPath.moveTo(0f, baseOff + sin((t * 0.3 + i * 0.9).toDouble()).toFloat() * 14f)
+                      var ax = 0f
+                      while (ax <= W) {
+                          val ay = baseOff + sin((t * 0.4 + i.toDouble() + ax * 0.009).toDouble()).toFloat() * 18f
+                          aPath.lineTo(ax, ay)
+                          ax += 18f
                       }
-                      canvas.drawRect(rect, pTower)
-                      val pShadow = Paint().apply { color = Color.parseColor("#44000000"); style = Paint.Style.FILL }
-                      canvas.drawRect(cx, topY, cx + towerWidth / 2f, bottomY, pShadow)
+                      aPath.lineTo(W, 0f); aPath.lineTo(0f, 0f); aPath.close()
+                      val aa = 12 + i * 6
+                      paint.color = if (i % 2 == 0) Color.argb(aa, 0, 220, 255)
+                                    else Color.argb(aa, 0, 200, 120)
+                      canvas.drawPath(aPath, paint)
                   }
 
+                  // â”€â”€ STARS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+                  for (s in starData) {
+                      val twinkle = ((sin((t * s[3] + s[0] * 12f).toDouble()) + 1.0) / 2.0).toFloat()
+                      paint.color = Color.argb((100 + (140 * twinkle).toInt()), 255, 255, 255)
+                      val r = s[2] * twinkle + 0.3f
+                      canvas.drawCircle(s[0] * W, s[1] * groundY * 0.88f, r, paint)
+                  }
+
+                  // â”€â”€ MOVING CLOUDS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+                  for (c in clouds) {
+                      c[0] += c[3]
+                      if (c[0] > W + 260f) c[0] = -260f
+                      drawCloud(canvas, c[0], c[1], c[2])
+                  }
+
+                  // â”€â”€ ANIMATED OCEAN WAVES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+                  wavePhase += 2.8f
+                  val wavePath = Path()
+                  wavePath.moveTo(0f, groundY)
+                  var wx2 = 0f
+                  while (wx2 <= W) {
+                      val wy = groundY +
+                          sin(((wx2 + wavePhase) * 0.030f).toDouble()).toFloat() * 9f +
+                          sin(((wx2 + wavePhase * 1.6f) * 0.055f).toDouble()).toFloat() * 4f
+                      wavePath.lineTo(wx2, wy)
+                      wx2 += 5f
+                  }
+                  wavePath.lineTo(W, H); wavePath.lineTo(0f, H); wavePath.close()
+                  paint.shader = LinearGradient(0f, groundY, 0f, H,
+                      0xFF0E4B99.toInt(), 0xFF041630.toInt(), Shader.TileMode.CLAMP)
+                  canvas.drawPath(wavePath, paint)
+                  paint.shader = null
+
+                  // Ocean shimmer highlights
+                  for (i in 0..6) {
+                      val sx = cx - 220f + i * 75f + sin((t * 1.3 + i).toDouble()).toFloat() * 28f
+                      val sy = groundY + 18f + i * 14f
+                      val sa = (160 * abs(sin((t * 2.0 + i).toDouble()))).toInt()
+                      paint.color = Color.argb(sa, 180, 220, 255)
+                      canvas.drawCircle(sx, sy, 2.5f, paint)
+                  }
+
+                  // â”€â”€ 3D ISLAND BASE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+                  val iY = groundY - 6f; val iRx = 290f; val iRy = 72f
+                  // Drop shadow
+                  paint.color = 0x55000000.toInt()
+                  canvas.drawOval(cx - iRx + 14f, iY - iRy / 2f + 22f,
+                      cx + iRx + 14f, iY + iRy / 2f + 22f, paint)
+                  // Side cliff (depth illusion)
+                  paint.color = 0xFF1A5920.toInt()
+                  canvas.drawOval(cx - iRx, iY - iRy / 2f + 14f, cx + iRx, iY + iRy / 2f + 16f, paint)
+                  // Grass top with radial gradient
+                  paint.shader = RadialGradient(cx - 60f, iY - 12f, iRx * 0.75f,
+                      0xFF70C74F.toInt(), 0xFF2A6E22.toInt(), Shader.TileMode.CLAMP)
+                  canvas.drawOval(cx - iRx, iY - iRy, cx + iRx, iY, paint)
+                  paint.shader = null
+                  // Grass arc detail lines
+                  paint.style = Paint.Style.STROKE; paint.strokeWidth = 1.5f
+                  paint.color = 0x2255AA44.toInt()
+                  for (i in -4..4) {
+                      val shrink = abs(i) * 28f
+                      canvas.drawArc(
+                          cx - iRx + shrink, iY - iRy + abs(i) * 6f,
+                          cx + iRx - shrink, iY,
+                          190f, 160f, false, paint
+                      )
+                  }
+                  paint.style = Paint.Style.FILL
+
+                  // â”€â”€ 3D TOWER FLOORS (back to front) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+                  val towerBase = iY - 10f
+                  for (i in 0 until floorCount) {
+                      drawFloor(canvas, i, cx, towerBase)
+                  }
+
+                  // Tower top beacon beam
+                  val beaconY = towerBase - floorCount * 50f - 35f
+                  paint.shader = LinearGradient(cx - 4f, beaconY - 90f, cx + 4f, beaconY,
+                      0xBBFFFFFF.toInt(), 0x0000FFFF.toInt(), Shader.TileMode.CLAMP)
+                  canvas.drawRect(cx - 4f, beaconY - 90f, cx + 4f, beaconY, paint)
+                  paint.shader = null
+
+                  // Beacon orb glow (layered circles, no BlurMaskFilter required)
+                  val pulseAlpha = ((sin((t * 4.0).toDouble()) + 1.0) / 2.0 * 200.0 + 55.0).toInt()
+                  for (r in listOf(22f, 16f, 10f, 5f)) {
+                      val a = (pulseAlpha * (1f - r / 24f)).toInt()
+                      paint.color = Color.argb(a, 0, 229, 255)
+                      canvas.drawCircle(cx, beaconY - 90f, r, paint)
+                  }
+
+                  // â”€â”€ PARTICLE SPARKS FROM TOWER TOP â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+                  if (particles.size < 30 && frame % 4L == 0L) {
+                      val particleColors = intArrayOf(
+                          0xFFFFD700.toInt(), 0xFF00E5FF.toInt(),
+                          0xFF00E676.toInt(), 0xFFE91E63.toInt(), 0xFFA020F0.toInt()
+                      )
+                      val c2 = particleColors[(Math.random() * particleColors.size).toInt()]
+                      particles.add(floatArrayOf(
+                          cx + (Math.random() * 28f - 14f).toFloat(),
+                          beaconY - 85f,
+                          (Math.random() * 2.2f - 1.1f).toFloat(),
+                          (-Math.random() * 3f - 0.5f).toFloat(),
+                          0f,
+                          45f + (Math.random() * 35f).toFloat(),
+                          c2.toFloat()
+                      ))
+                  }
+                  val pIter = particles.iterator()
+                  while (pIter.hasNext()) {
+                      val pp = pIter.next()
+                      pp[0] += pp[2]; pp[1] += pp[3]
+                      pp[3] += 0.06f   // gravity
+                      pp[4] += 1f
+                      if (pp[4] >= pp[5]) { pIter.remove(); continue }
+                      val lifeRatio = 1f - pp[4] / pp[5]
+                      val alpha = (255 * lifeRatio).toInt()
+                      val pSize = 4.5f * lifeRatio + 0.5f
+                      paint.color = pp[6].toInt(); paint.alpha = alpha
+                      canvas.drawCircle(pp[0], pp[1], pSize, paint)
+                      paint.alpha = 255
+                  }
+
+                  // â”€â”€ FISH JUMP ANIMATION (every 15 seconds) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
                   val now = System.currentTimeMillis()
-                  if (!isFishFlying && now - lastJumpTime > 15000) {
-                      isFishFlying = true
-                      fishTimeProgress = 0f
+                  if (!fishActive && now - lastFishTime > 15_000L) {
+                      fishActive = true; fishProgress = 0f
                   }
-
-                  if (isFishFlying) {
-                      fishTimeProgress += 1.5f
-                      if (fishTimeProgress > animationDuration) {
-                          isFishFlying = false
-                          lastJumpTime = System.currentTimeMillis()
+                  if (fishActive) {
+                      fishProgress += 1.6f
+                      if (fishProgress >= 100f) {
+                          fishActive = false; lastFishTime = System.currentTimeMillis()
                       } else {
-                          val normTime = fishTimeProgress / animationDuration
-                          val fishX = (normTime * (width + 300f)) - 150f
-                          val towerTopY = cy - 20f - (floorCount * floorHeight)
-                          val clearance = 100f
-                          val peakY = towerTopY - clearance
-                          val heightDelta = cy - peakY
-                          val fishY = cy - (sin(normTime * Math.PI) * heightDelta).toFloat()
+                          val norm = fishProgress / 100f
+                          val fishX = norm * (W + 220f) - 110f
+                          val peakY = beaconY - 55f
+                          val fishY = groundY - sin((norm * Math.PI).toDouble()).toFloat() * (groundY - peakY)
 
-                          canvas.drawOval(fishX - 30f, fishY - 15f, fishX + 30f, fishY + 15f, paintFish)
-                          val tail = Path().apply {
-                              moveTo(fishX - 25f, fishY)
-                              lineTo(fishX - 50f, fishY - 20f)
-                              lineTo(fishX - 50f, fishY + 20f)
+                          // Shadow on water surface
+                          val shadowSize = 20f * sin((norm * Math.PI).toDouble()).toFloat()
+                          paint.color = 0x55000000.toInt()
+                          canvas.drawOval(fishX - shadowSize, groundY - 5f,
+                              fishX + shadowSize, groundY + 5f, paint)
+
+                          // Sparkle trail (3 fading dots behind fish)
+                          for (tr in 1..4) {
+                              val tn = (fishProgress - tr * 4f) / 100f
+                              if (tn > 0f) {
+                                  val tx = tn * (W + 220f) - 110f
+                                  val ty = groundY - sin((tn * Math.PI).toDouble()).toFloat() * (groundY - peakY)
+                                  paint.color = Color.argb(220 - tr * 50, 255, 200, 80)
+                                  canvas.drawCircle(tx, ty, 7f - tr * 1.5f, paint)
+                              }
+                          }
+
+                          // Fish body
+                          paint.color = 0xFFFF9800.toInt()
+                          canvas.drawOval(fishX - 30f, fishY - 14f, fishX + 30f, fishY + 14f, paint)
+
+                          // Dorsal fin
+                          paint.color = 0xFFE65100.toInt()
+                          val fin = Path().apply {
+                              moveTo(fishX - 5f, fishY - 14f)
+                              lineTo(fishX + 2f, fishY - 28f)
+                              lineTo(fishX + 14f, fishY - 14f)
                               close()
                           }
-                          canvas.drawPath(tail, paintFish)
+                          canvas.drawPath(fin, paint)
+
+                          // Tail
+                          val tail = Path().apply {
+                              moveTo(fishX - 24f, fishY)
+                              lineTo(fishX - 50f, fishY - 22f)
+                              lineTo(fishX - 50f, fishY + 22f)
+                              close()
+                          }
+                          canvas.drawPath(tail, paint)
+
+                          // Eye white + pupil
+                          paint.color = 0xFFFFFFFF.toInt()
+                          canvas.drawCircle(fishX + 16f, fishY - 4f, 5.5f, paint)
+                          paint.color = 0xFF111111.toInt()
+                          canvas.drawCircle(fishX + 17.5f, fishY - 4f, 2.8f, paint)
+                          // Eye shine
+                          paint.color = 0xCCFFFFFF.toInt()
+                          canvas.drawCircle(fishX + 18.5f, fishY - 6f, 1.3f, paint)
                       }
                   }
-                  invalidate()
+
+                  invalidate()   // continuous animation
+              }
+
+              // â”€â”€ Helper: draw a fluffy cloud â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+              private fun drawCloud(canvas: Canvas, x: Float, y: Float, s: Float) {
+                  paint.color = Color.argb((65 * s).toInt(), 210, 230, 255)
+                  canvas.drawCircle(x, y, 40f * s, paint)
+                  canvas.drawCircle(x + 34f * s, y + 9f * s, 29f * s, paint)
+                  canvas.drawCircle(x - 29f * s, y + 10f * s, 24f * s, paint)
+                  canvas.drawCircle(x + 9f * s, y - 16f * s, 27f * s, paint)
               }
           }
           EOF
 
-          # 2. UPGRADED CUSTOM GRAPH VIEW - CANDLESTICK & GRID PATTERNS
+          # â”€â”€ 2. CustomGraphView.kt â€” Real EMA + Volume Bars â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
           cat << 'EOF' > app/src/main/java/com/zatomic/tradinggame/CustomGraphView.kt
           package com.zatomic.tradinggame
+
           import android.content.Context
           import android.graphics.*
           import android.util.AttributeSet
           import android.view.View
 
           class CustomGraphView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
+
               data class Candle(val open: Float, val close: Float, val high: Float, val low: Float)
+
               private val candles = mutableListOf<Candle>()
-              
-              private val paintGreen = Paint().apply { color = Color.parseColor("#00FF00"); style = Paint.Style.FILL; isAntiAlias = true }
-              private val paintRed = Paint().apply { color = Color.parseColor("#FF0000"); style = Paint.Style.FILL; isAntiAlias = true }
-              private val paintWickGreen = Paint().apply { color = Color.parseColor("#00FF00"); strokeWidth = 3f; isAntiAlias = true }
-              private val paintWickRed = Paint().apply { color = Color.parseColor("#FF0000"); strokeWidth = 3f; isAntiAlias = true }
-              
-              private val paintGrid = Paint().apply { color = Color.parseColor("#1AFFFFFF"); strokeWidth = 1f }
-              private val paintEma21 = Paint().apply { color = Color.parseColor("#FFC107"); strokeWidth = 3f; style = Paint.Style.STROKE; isAntiAlias = true }
-              private val paintEma9 = Paint().apply { color = Color.parseColor("#03A9F4"); strokeWidth = 3f; style = Paint.Style.STROKE; isAntiAlias = true }
+
+              // â”€â”€ Real EMA calculation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+              private fun calcEMA(period: Int): List<Float> {
+                  if (candles.size < period) return emptyList()
+                  val k = 2f / (period + 1f)
+                  var ema = candles.take(period).map { it.close }.average().toFloat()
+                  val result = mutableListOf<Float>()
+                  for (i in period until candles.size) {
+                      ema = candles[i].close * k + ema * (1f - k)
+                      result.add(ema)
+                  }
+                  return result
+              }
+
+              // â”€â”€ Paints â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+              private val paintGrid  = Paint().apply { color = 0x15FFFFFF.toInt(); strokeWidth = 0.8f; isAntiAlias = true }
+              private val paintWickG = Paint().apply { color = 0xFF00E676.toInt(); strokeWidth = 2.2f; isAntiAlias = true }
+              private val paintWickR = Paint().apply { color = 0xFFFF1744.toInt(); strokeWidth = 2.2f; isAntiAlias = true }
+              private val paintEma21 = Paint().apply {
+                  color = 0xFFFFC107.toInt(); strokeWidth = 2.5f
+                  style = Paint.Style.STROKE; isAntiAlias = true
+              }
+              private val paintEma9  = Paint().apply {
+                  color = 0xFF03A9F4.toInt(); strokeWidth = 2.5f
+                  style = Paint.Style.STROKE; isAntiAlias = true
+              }
+              private val paintLabel = Paint().apply {
+                  color = 0x88FFFFFF.toInt(); textSize = 21f; isAntiAlias = true
+              }
+              private val paintVol   = Paint().apply { style = Paint.Style.FILL; isAntiAlias = true }
 
               fun addCandle(open: Float, close: Float, high: Float, low: Float) {
-                  if (candles.size > 28) candles.removeAt(0)
+                  if (candles.size > 32) candles.removeAt(0)
                   candles.add(Candle(open, close, high, low))
                   invalidate()
               }
 
               override fun onDraw(canvas: Canvas) {
                   super.onDraw(canvas)
-                  // Draw Trading Grid Background
-                  for (i in 1..6) {
-                      canvas.drawLine(0f, height * (i/6f), width.toFloat(), height * (i/6f), paintGrid)
-                      canvas.drawLine(width * (i/6f), 0f, width * (i/6f), height.toFloat(), paintGrid)
+                  if (candles.isEmpty()) return
+
+                  val W  = width.toFloat()
+                  val H  = height.toFloat()
+                  val chartH = H * 0.76f          // main chart area height
+                  val volTop = H * 0.80f           // volume panel top
+                  val volH   = H * 0.14f           // volume panel height
+
+                  // â”€â”€ Background grid â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+                  for (i in 1..5) {
+                      val gy = chartH * i / 6f
+                      canvas.drawLine(0f, gy, W, gy, paintGrid)
+                      canvas.drawLine(W * i / 6f, 0f, W * i / 6f, chartH, paintGrid)
+                  }
+                  canvas.drawLine(0f, volTop, W, volTop, paintGrid)
+
+                  val maxP = candles.maxOf { it.high } + 1f
+                  val minP = candles.minOf { it.low }  - 1f
+                  val range = if (maxP == minP) 1f else maxP - minP
+
+                  // Price axis labels
+                  for (i in 0..3) {
+                      val price = minP + range * (i / 3f)
+                      val ly = chartH - chartH * (i / 3f) - 2f
+                      canvas.drawText(String.format("%.1f", price), 4f, ly, paintLabel)
                   }
 
-                  if (candles.isEmpty()) return
-                  
-                  val maxP = candles.maxOf { it.high } + 2f
-                  val minP = candles.minOf { it.low } - 2f
-                  val range = if (maxP == minP) 1f else (maxP - minP)
-                  
-                  val candleW = width.toFloat() / 32f
-                  val spacing = width.toFloat() / 29f
-                  
-                  val pathEma21 = Path()
-                  val pathEma9 = Path()
+                  val spacing  = W / (candles.size + 1f)
+                  val candleW  = (spacing * 0.55f).coerceAtLeast(4f)
+
+                  val ema9  = calcEMA(9)
+                  val ema21 = calcEMA(21)
+                  val ema9Path  = Path(); val ema21Path = Path()
+                  var ema9Started = false; var ema21Started = false
 
                   for (i in candles.indices) {
-                      val c = candles[i]
-                      val cx = i * spacing + candleW
-                      
-                      val topY = height - (((maxOf(c.open, c.close) - minP) / range) * height)
-                      val bottomY = height - (((minOf(c.open, c.close) - minP) / range) * height)
-                      val highY = height - (((c.high - minP) / range) * height)
-                      val lowY = height - (((c.low - minP) / range) * height)
-                      
-                      val isGreen = c.close >= c.open
-                      val pBody = if (isGreen) paintGreen else paintRed
-                      val pWick = if (isGreen) paintWickGreen else paintWickRed
-                      
-                      // Draw High/Low Wick
-                      canvas.drawLine(cx, highY, cx, lowY, pWick)
-                      
-                      // Draw Candle Body (Hammer/Engulfing physics)
-                      val bodyHeight = maxOf(2f, bottomY - topY) // Minimum body height
-                      canvas.drawRect(cx - candleW/2, topY, cx + candleW/2, topY + bodyHeight, pBody)
-                      
-                      // Draw EMA Lines over the chart
-                      val midY = (topY + bottomY) / 2
-                      if (i == 0) {
-                          pathEma21.moveTo(cx, midY + 15f)
-                          pathEma9.moveTo(cx, midY - 10f)
-                      } else {
-                          pathEma21.lineTo(cx, midY + 15f)
-                          pathEma9.lineTo(cx, midY - 10f)
+                      val c  = candles[i]
+                      val cx = (i + 1f) * spacing
+
+                      // Screen Y coordinates
+                      fun toScreenY(price: Float) = chartH - ((price - minP) / range) * chartH
+
+                      val openY  = toScreenY(c.open)
+                      val closeY = toScreenY(c.close)
+                      val highY  = toScreenY(c.high)
+                      val lowY   = toScreenY(c.low)
+
+                      val isGreen  = c.close >= c.open
+                      val bodyTop  = minOf(openY, closeY)
+                      val bodyBot  = maxOf(openY, closeY)
+                      val bodyH    = maxOf(bodyBot - bodyTop, 2f)
+
+                      // â”€â”€ Volume bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+                      val volBarH = volH * 0.75f
+                      paintVol.color = if (isGreen) 0x7700E676.toInt() else 0x77FF1744.toInt()
+                      canvas.drawRect(cx - candleW / 2f, volTop + volH - volBarH,
+                          cx + candleW / 2f, volTop + volH, paintVol)
+
+                      // â”€â”€ Wick â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+                      val wp = if (isGreen) paintWickG else paintWickR
+                      canvas.drawLine(cx, highY, cx, bodyTop, wp)
+                      canvas.drawLine(cx, bodyBot, cx, lowY, wp)
+
+                      // â”€â”€ Candle body with gradient â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+                      val bodyShader = LinearGradient(
+                          cx - candleW / 2f, bodyTop, cx + candleW / 2f, bodyTop + bodyH,
+                          if (isGreen) 0xFF00FF88.toInt() else 0xFFFF4444.toInt(),
+                          if (isGreen) 0xFF008844.toInt() else 0xFF990000.toInt(),
+                          Shader.TileMode.CLAMP
+                      )
+                      val bodyPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                          shader = bodyShader; style = Paint.Style.FILL
+                      }
+                      canvas.drawRoundRect(
+                          cx - candleW / 2f, bodyTop,
+                          cx + candleW / 2f, bodyTop + bodyH,
+                          3f, 3f, bodyPaint
+                      )
+
+                      // â”€â”€ EMA path points â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+                      val e9i  = i - (candles.size - ema9.size)
+                      val e21i = i - (candles.size - ema21.size)
+                      if (e9i in ema9.indices) {
+                          val ey = toScreenY(ema9[e9i])
+                          if (!ema9Started) { ema9Path.moveTo(cx, ey); ema9Started = true }
+                          else ema9Path.lineTo(cx, ey)
+                      }
+                      if (e21i in ema21.indices) {
+                          val ey = toScreenY(ema21[e21i])
+                          if (!ema21Started) { ema21Path.moveTo(cx, ey); ema21Started = true }
+                          else ema21Path.lineTo(cx, ey)
                       }
                   }
-                  canvas.drawPath(pathEma21, paintEma21)
-                  canvas.drawPath(pathEma9, paintEma9)
+
+                  canvas.drawPath(ema21Path, paintEma21)
+                  canvas.drawPath(ema9Path,  paintEma9)
               }
           }
           EOF
 
-          # 3. MAIN ACTIVITY - NO CHANGES REMOVED
+          # â”€â”€ 3. MainActivity.kt â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
           cat << 'EOF' > app/src/main/java/com/zatomic/tradinggame/MainActivity.kt
           package com.zatomic.tradinggame
+
           import android.content.Context
           import android.content.Intent
           import android.os.Bundle
@@ -383,9 +899,9 @@ jobs:
                   super.onCreate(savedInstanceState)
                   setContentView(R.layout.activity_main)
 
-                  tvWallet = findViewById(R.id.tvWallet)
+                  tvWallet     = findViewById(R.id.tvWallet)
                   tvTowerFloor = findViewById(R.id.tvTowerFloor)
-                  worldView = findViewById(R.id.cinematicWorldView)
+                  worldView    = findViewById(R.id.cinematicWorldView)
 
                   findViewById<ImageView>(R.id.btnOpenWalletSettings).setOnClickListener {
                       startActivity(Intent(this, WalletSettingsActivity::class.java))
@@ -394,15 +910,14 @@ jobs:
                   findViewById<Button>(R.id.btnUpgradeTower).setOnClickListener {
                       val cost = towerFloor * 500
                       if (balance < cost) {
-                          Toast.makeText(this, "Need ₹$cost to construct next floor!", Toast.LENGTH_SHORT).show()
+                          Toast.makeText(this, "Need Rs.$cost to build floor ${towerFloor + 1}!", Toast.LENGTH_SHORT).show()
                           return@setOnClickListener
                       }
                       balance -= cost
                       towerFloor++
-                      getSharedPreferences("TradingGamePrefs", Context.MODE_PRIVATE).edit()
-                          .putInt("wallet_balance", balance)
-                          .putInt("tower_floor", towerFloor).apply()
+                      savePrefs()
                       syncUI()
+                      Toast.makeText(this, "Floor $towerFloor constructed!", Toast.LENGTH_SHORT).show()
                   }
 
                   findViewById<Button>(R.id.btnOpenMarket).setOnClickListener {
@@ -412,25 +927,39 @@ jobs:
 
               override fun onResume() {
                   super.onResume()
-                  val prefs = getSharedPreferences("TradingGamePrefs", Context.MODE_PRIVATE)
-                  balance = prefs.getInt("wallet_balance", 10000)
-                  towerFloor = prefs.getInt("tower_floor", 1)
+                  loadPrefs()
                   syncUI()
               }
 
+              private fun loadPrefs() {
+                  val p = getSharedPreferences("TradingGamePrefs", Context.MODE_PRIVATE)
+                  balance    = p.getInt("wallet_balance", 10000)
+                  towerFloor = p.getInt("tower_floor", 1)
+              }
+
+              private fun savePrefs() {
+                  getSharedPreferences("TradingGamePrefs", Context.MODE_PRIVATE).edit()
+                      .putInt("wallet_balance", balance)
+                      .putInt("tower_floor", towerFloor)
+                      .apply()
+              }
+
               private fun syncUI() {
-                  tvWallet.text = "Balance: ₹$balance"
-                  tvTowerFloor.text = "Island Tower: Level $towerFloor"
-                  findViewById<Button>(R.id.btnUpgradeTower).text = "Build Floor ${towerFloor + 1} (Cost: ₹${towerFloor * 500})"
+                  val nextCost = towerFloor * 500
+                  tvWallet.text     = "Balance: Rs.$balance"
+                  tvTowerFloor.text = "Lv.$towerFloor"
+                  findViewById<Button>(R.id.btnUpgradeTower).text =
+                      "Build Floor ${towerFloor + 1}  (Cost: Rs.$nextCost)"
                   worldView.floorCount = towerFloor
                   worldView.invalidate()
               }
           }
           EOF
 
-          # 4. WALLET SETTINGS ACTIVITY - NO CHANGES REMOVED
+          # â”€â”€ 4. WalletSettingsActivity.kt â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
           cat << 'EOF' > app/src/main/java/com/zatomic/tradinggame/WalletSettingsActivity.kt
           package com.zatomic.tradinggame
+
           import android.content.Context
           import android.os.Bundle
           import android.widget.Button
@@ -448,58 +977,65 @@ jobs:
               override fun onCreate(savedInstanceState: Bundle?) {
                   super.onCreate(savedInstanceState)
                   setContentView(R.layout.activity_wallet_settings)
-                  
+
                   tvBalance = findViewById(R.id.tvCurrentBalance)
                   val prefs = getSharedPreferences("TradingGamePrefs", Context.MODE_PRIVATE)
-                  balance = prefs.getInt("wallet_balance", 10000)
+                  balance    = prefs.getInt("wallet_balance", 10000)
                   towerFloor = prefs.getInt("tower_floor", 1)
-                  tvBalance.text = "Funds: ₹$balance"
+                  tvBalance.text = "Funds: Rs.$balance"
 
-                  setupBtn(R.id.btnClaim1hr, "t_1h", 3600, 100)
-                  setupBtn(R.id.btnClaim3hr, "t_3h", 10800, 300)
-                  setupBtn(R.id.btnClaim24hr, "t_24h", 86400, 1000)
+                  setupBtn(R.id.btnClaim1hr,  "t_1h",  3_600L,  100)
+                  setupBtn(R.id.btnClaim3hr,  "t_3h",  10_800L, 300)
+                  setupBtn(R.id.btnClaim24hr, "t_24h", 86_400L, 1000)
 
                   findViewById<Button>(R.id.btnBackToHome).setOnClickListener { finish() }
 
                   job = CoroutineScope(Dispatchers.Main).launch {
-                      while(true) {
+                      while (true) {
                           val now = System.currentTimeMillis()
-                          updateLabel("t_1h", now, findViewById(R.id.tvTimer1hr), findViewById(R.id.btnClaim1hr), "1 Hour", 100)
-                          updateLabel("t_3h", now, findViewById(R.id.tvTimer3hr), findViewById(R.id.btnClaim3hr), "3 Hour", 300)
-                          updateLabel("t_24h", now, findViewById(R.id.tvTimer24hr), findViewById(R.id.btnClaim24hr), "24 Hour", 1000)
-                          findViewById<TextView>(R.id.tvMahaulText).text = "Mahaul Status: Level $towerFloor Tower is Safe."
-                          delay(1000)
+                          updateLabel("t_1h",  now, R.id.tvTimer1hr,  R.id.btnClaim1hr,  "1 Hour",  100)
+                          updateLabel("t_3h",  now, R.id.tvTimer3hr,  R.id.btnClaim3hr,  "3 Hour",  300)
+                          updateLabel("t_24h", now, R.id.tvTimer24hr, R.id.btnClaim24hr, "24 Hour", 1000)
+                          findViewById<TextView>(R.id.tvMahaulText).text =
+                              "Mahaul: Level $towerFloor Island Tower â€” All Systems Secure"
+                          delay(1_000)
                       }
                   }
               }
 
-              private fun setupBtn(id: Int, key: String, secs: Long, prize: Int) {
-                  findViewById<Button>(id).setOnClickListener {
+              private fun setupBtn(btnId: Int, key: String, secs: Long, prize: Int) {
+                  findViewById<Button>(btnId).setOnClickListener {
                       val prefs = getSharedPreferences("TradingGamePrefs", Context.MODE_PRIVATE)
                       val target = prefs.getLong(key, 0L)
                       val now = System.currentTimeMillis()
-                      if (target == 0L) {
-                          prefs.edit().putLong(key, now + (secs * 1000)).apply()
-                          Toast.makeText(this, "Timer Started!", Toast.LENGTH_SHORT).show()
-                      } else if (now >= target) {
-                          balance += prize
-                          prefs.edit().putLong(key, 0L).putInt("wallet_balance", balance).apply()
-                          tvBalance.text = "Funds: ₹$balance"
-                          Toast.makeText(this, "Claimed ₹$prize!", Toast.LENGTH_SHORT).show()
+                      when {
+                          target == 0L -> {
+                              prefs.edit().putLong(key, now + secs * 1_000L).apply()
+                              Toast.makeText(this, "Timer started!", Toast.LENGTH_SHORT).show()
+                          }
+                          now >= target -> {
+                              balance += prize
+                              prefs.edit().putLong(key, 0L).putInt("wallet_balance", balance).apply()
+                              tvBalance.text = "Funds: Rs.$balance"
+                              Toast.makeText(this, "Claimed Rs.$prize!", Toast.LENGTH_SHORT).show()
+                          }
+                          else -> Toast.makeText(this, "Timer still running!", Toast.LENGTH_SHORT).show()
                       }
                   }
               }
 
-              private fun updateLabel(key: String, now: Long, tv: TextView, btn: Button, name: String, p: Int) {
+              private fun updateLabel(key: String, now: Long, tvId: Int, btnId: Int, name: String, prize: Int) {
                   val target = getSharedPreferences("TradingGamePrefs", Context.MODE_PRIVATE).getLong(key, 0L)
-                  if (target == 0L) {
-                      tv.text = "$name: Ready"; btn.text = "Start Timer (Get ₹$p)"
-                  } else if (now >= target) {
-                      tv.text = "$name: Finished!"; btn.text = "Claim ₹$p NOW!"
-                  } else {
-                      val diff = (target - now) / 1000
-                      tv.text = String.format("%s: %02d:%02d:%02d left", name, diff / 3600, (diff % 3600) / 60, diff % 60)
-                      btn.text = "LOCKED"
+                  val tv = findViewById<TextView>(tvId)
+                  val btn = findViewById<Button>(btnId)
+                  when {
+                      target == 0L  -> { tv.text = "$name: Ready"; btn.text = "Start Timer (Get Rs.$prize)" }
+                      now >= target -> { tv.text = "$name: Done!";  btn.text = "Claim Rs.$prize NOW!" }
+                      else -> {
+                          val diff = (target - now) / 1_000L
+                          tv.text = String.format("%s: %02d:%02d:%02d left", name, diff / 3600, (diff % 3600) / 60, diff % 60)
+                          btn.text = "LOCKED"
+                      }
                   }
               }
 
@@ -507,9 +1043,10 @@ jobs:
           }
           EOF
 
-          # 5. TRADING ACTIVITY - UPGRADED O.C.H.L CANDLE GENERATION
+          # â”€â”€ 5. TradingActivity.kt â€” OHLC Engine + Rs.500 bet + result flash â”€â”€â”€â”€
           cat << 'EOF' > app/src/main/java/com/zatomic/tradinggame/TradingActivity.kt
           package com.zatomic.tradinggame
+
           import android.content.Context
           import android.graphics.Color
           import android.os.Bundle
@@ -521,78 +1058,128 @@ jobs:
           import java.util.Random
 
           class TradingActivity : AppCompatActivity() {
-              private var bal = 10000; private var bet = 10; private var isTrade = false
-              private var currentPrice = 514.85f // Matching image 1 start price
-              private lateinit var tvBal: TextView; private lateinit var tvP: TextView; private lateinit var tvT: TextView
-              private lateinit var g: CustomGraphView; private var job: Job? = null
+
+              private var bal = 10000
+              private var bet = 10
+              private var isTrade = false
+              private var currentPrice = 514.85f
+              private var openPrice = 514.85f
+
+              private lateinit var tvBal: TextView
+              private lateinit var tvPrice: TextView
+              private lateinit var tvTimer: TextView
+              private lateinit var graph: CustomGraphView
+
+              private val rng = Random()
+              private var tickerJob: Job? = null
 
               override fun onCreate(savedInstanceState: Bundle?) {
                   super.onCreate(savedInstanceState)
                   setContentView(R.layout.activity_trading)
-                  tvBal = findViewById(R.id.tvTradingWallet); tvP = findViewById(R.id.tvLivePrice)
-                  tvT = findViewById(R.id.tvCountdown); g = findViewById(R.id.customGraphView)
-                  
-                  bal = getSharedPreferences("TradingGamePrefs", Context.MODE_PRIVATE).getInt("wallet_balance", 10000)
-                  tvBal.text = "Wallet: ₹$bal"
 
-                  findViewById<Button>(R.id.btnAmt10).setOnClickListener { bet = 10 }
-                  findViewById<Button>(R.id.btnAmt50).setOnClickListener { bet = 50 }
-                  findViewById<Button>(R.id.btnAmt100).setOnClickListener { bet = 100 }
+                  tvBal   = findViewById(R.id.tvTradingWallet)
+                  tvPrice = findViewById(R.id.tvLivePrice)
+                  tvTimer = findViewById(R.id.tvCountdown)
+                  graph   = findViewById(R.id.customGraphView)
 
-                  // Candlestick Pattern Generator Engine
-                  job = CoroutineScope(Dispatchers.Main).launch {
-                      var openPrice = currentPrice
-                      while(true) {
-                          val change = (Random().nextFloat() * 6f) - 3f // Random market fluctuation
-                          val closePrice = openPrice + change
-                          val highPrice = maxOf(openPrice, closePrice) + (Random().nextFloat() * 2f)
-                          val lowPrice = minOf(openPrice, closePrice) - (Random().nextFloat() * 2f)
-                          
-                          currentPrice = closePrice
-                          tvP.text = String.format("₹%.2f", currentPrice)
-                          tvP.setTextColor(if(closePrice >= openPrice) Color.GREEN else Color.RED)
-                          
-                          g.addCandle(openPrice, closePrice, highPrice, lowPrice)
-                          openPrice = closePrice // Next candle opens at current close
-                          delay(1200) // Update every 1.2 seconds for realistic feel
-                      }
+                  bal = getSharedPreferences("TradingGamePrefs", Context.MODE_PRIVATE)
+                      .getInt("wallet_balance", 10000)
+                  tvBal.text = "Wallet: Rs.$bal"
+
+                  // Bet amount buttons
+                  listOf(
+                      Pair(R.id.btnAmt10,  10),
+                      Pair(R.id.btnAmt50,  50),
+                      Pair(R.id.btnAmt100, 100),
+                      Pair(R.id.btnAmt500, 500)
+                  ).forEach { (id, amount) ->
+                      findViewById<Button>(id).setOnClickListener { bet = amount }
                   }
 
-                  findViewById<Button>(R.id.btnUp).setOnClickListener { trade("UP") }
-                  findViewById<Button>(R.id.btnDown).setOnClickListener { trade("DOWN") }
+                  // Trade buttons
+                  findViewById<Button>(R.id.btnUp).setOnClickListener   { placeTrade("UP") }
+                  findViewById<Button>(R.id.btnDown).setOnClickListener { placeTrade("DOWN") }
+
+                  // OHLC candle generator â€” new candle every 1.4 s
+                  tickerJob = CoroutineScope(Dispatchers.Main).launch {
+                      while (true) {
+                          val change = (rng.nextFloat() * 8f) - 4f
+                          val closeP = (openPrice + change).coerceAtLeast(10f)
+                          val highP  = maxOf(openPrice, closeP) + rng.nextFloat() * 2.5f
+                          val lowP   = minOf(openPrice, closeP) - rng.nextFloat() * 2.5f
+
+                          currentPrice = closeP
+                          tvPrice.text = String.format("Rs.%.2f", currentPrice)
+                          tvPrice.setTextColor(if (closeP >= openPrice) Color.GREEN else Color.RED)
+                          graph.addCandle(openPrice, closeP, highP, lowP)
+
+                          openPrice = closeP
+                          delay(1_400)
+                      }
+                  }
               }
 
-              private fun trade(type: String) {
-                  if (isTrade || bal < bet) return
-                  bal -= bet; tvBal.text = "Wallet: ₹$bal"; isTrade = true
-                  val sp = currentPrice
+              private fun placeTrade(direction: String) {
+                  if (isTrade) { Toast.makeText(this, "Trade in progress!", Toast.LENGTH_SHORT).show(); return }
+                  if (bal < bet)  { Toast.makeText(this, "Insufficient balance!", Toast.LENGTH_SHORT).show(); return }
+
+                  bal -= bet
+                  tvBal.text = "Wallet: Rs.$bal"
+                  isTrade = true
+                  val entryPrice = currentPrice
+
                   CoroutineScope(Dispatchers.Main).launch {
-                      for(i in 5 downTo 1) { tvT.text = "Expiry: ${i}s"; delay(1000) }
-                      if((type=="UP" && currentPrice>sp) || (type=="DOWN" && currentPrice<sp)) { 
-                          bal += bet*2; Toast.makeText(this@TradingActivity, "PROFIT WIN!", Toast.LENGTH_SHORT).show() 
-                      } else {
-                          Toast.makeText(this@TradingActivity, "LOSS!", Toast.LENGTH_SHORT).show() 
+                      for (i in 5 downTo 1) {
+                          tvTimer.text = "Expiry: ${i}s"
+                          delay(1_000)
                       }
-                      getSharedPreferences("TradingGamePrefs", Context.MODE_PRIVATE).edit().putInt("wallet_balance", bal).apply()
-                      tvBal.text = "Wallet: ₹$bal"; isTrade = false; tvT.text = "Clock: Standby"
+
+                      val exitPrice = currentPrice
+                      val won = when (direction) {
+                          "UP"   -> exitPrice > entryPrice
+                          "DOWN" -> exitPrice < entryPrice
+                          else   -> false
+                      }
+
+                      if (won) {
+                          bal += bet * 2
+                          Toast.makeText(this@TradingActivity, "WIN! +Rs.${bet}", Toast.LENGTH_SHORT).show()
+                          tvBal.setTextColor(Color.GREEN)
+                      } else {
+                          Toast.makeText(this@TradingActivity, "LOSS  -Rs.$bet", Toast.LENGTH_SHORT).show()
+                          tvBal.setTextColor(Color.RED)
+                      }
+
+                      getSharedPreferences("TradingGamePrefs", Context.MODE_PRIVATE)
+                          .edit().putInt("wallet_balance", bal).apply()
+                      tvBal.text = "Wallet: Rs.$bal"
+
+                      delay(800)
+                      tvBal.setTextColor(Color.WHITE)
+                      isTrade = false
+                      tvTimer.text = "Clock: Standby"
                   }
               }
-              override fun onDestroy() { super.onDestroy(); job?.cancel() }
+
+              override fun onDestroy() { super.onDestroy(); tickerJob?.cancel() }
           }
           EOF
 
-          # MANIFEST - FIXED
+          # â”€â”€ 6. AndroidManifest.xml â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
           cat << 'EOF' > app/src/main/AndroidManifest.xml
           <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-              <application android:label="VIP Trading World" android:icon="@mipmap/ic_launcher" android:theme="@style/Theme.TradingGame">
+              <application
+                  android:label="VIP Trading World"
+                  android:icon="@mipmap/ic_launcher"
+                  android:theme="@style/Theme.TradingGame">
                   <activity android:name=".MainActivity" android:exported="true">
                       <intent-filter>
-                          <action android:name="android.intent.action.MAIN" />
-                          <category android:name="android.intent.category.LAUNCHER" />
+                          <action android:name="android.intent.action.MAIN"/>
+                          <category android:name="android.intent.category.LAUNCHER"/>
                       </intent-filter>
                   </activity>
-                  <activity android:name=".WalletSettingsActivity" android:exported="false" />
-                  <activity android:name=".TradingActivity" android:exported="false" />
+                  <activity android:name=".WalletSettingsActivity" android:exported="false"/>
+                  <activity android:name=".TradingActivity"        android:exported="false"/>
               </application>
           </manifest>
           EOF
@@ -600,11 +1187,10 @@ jobs:
       - name: "Step 7: Build Standalone APK"
         run: |
           chmod +x gradlew
-          ./gradlew :app:assembleDebug
+          ./gradlew :app:assembleDebug --no-daemon
 
       - name: "Step 8: Upload Final APK"
         uses: actions/upload-artifact@v4
         with:
-          name: "Trading-Tower-Pro-Candlesticks"
+          name: "3D-Trading-Tower-Ultimate-Complete"
           path: app/build/outputs/apk/debug/app-debug.apk
-
