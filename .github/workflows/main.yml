@@ -51,6 +51,7 @@ jobs:
           cat << 'EOF' > app/src/main/res/values/colors.xml
           <?xml version="1.0" encoding="utf-8"?><resources><color name="black">#000000</color><color name="white">#FFFFFF</color></resources>
           EOF
+          
           cat << 'EOF' > app/src/main/res/values/themes.xml
           <resources><style name="Theme.TradingGame" parent="Theme.AppCompat.Light.NoActionBar"/></resources>
           EOF
@@ -88,7 +89,8 @@ jobs:
                       android:layout_marginEnd="12dp"/>
                   <ImageView android:id="@+id/btnOpenWalletSettings"
                       android:layout_width="30dp" android:layout_height="30dp"
-                      android:src="@drawable/ic_plus_circle"/>
+                      android:src="@drawable/ic_plus_circle"
+                      android:contentDescription="Wallet Settings"/>
               </LinearLayout>
 
               <com.zatomic.tradinggame.CinematicWorldView
@@ -119,7 +121,7 @@ jobs:
           </RelativeLayout>
           EOF
 
-          # OFFLINE TIME CLAIM HUB - UPGRADED TO 4 TIMERS (1m, 10m, 30m, 1h)
+          # OFFLINE TIME CLAIM HUB - UPGRADED TO 4 TIMERS
           cat << 'EOF' > app/src/main/res/layout/activity_wallet_settings.xml
           <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent" android:layout_height="match_parent"
@@ -231,7 +233,7 @@ jobs:
                   android:layout_width="wrap_content" android:layout_height="wrap_content"
                   android:text="Rs.100.00" android:textColor="#00FF88" android:textSize="28sp"
                   android:textStyle="bold" android:layout_below="@id/headerPro"
-                  android:layout_alignParentRight="true" android:layout_marginTop="6dp"
+                  android:layout_alignParentEnd="true" android:layout_marginTop="6dp"
                   android:background="#1A00FF00" android:padding="6dp"/>
               <com.zatomic.tradinggame.CustomGraphView
                   android:id="@+id/customGraphView"
@@ -246,7 +248,7 @@ jobs:
                   android:layout_width="wrap_content" android:layout_height="wrap_content"
                   android:text="Clock: Standby" android:textColor="#FFEB3B"
                   android:layout_above="@+id/betAmountLayout"
-                  android:layout_alignParentRight="true" android:layout_marginBottom="8dp"/>
+                  android:layout_alignParentEnd="true" android:layout_marginBottom="8dp"/>
               <LinearLayout android:id="@+id/betAmountLayout"
                   android:layout_width="match_parent" android:layout_height="wrap_content"
                   android:orientation="horizontal" android:weightSum="4"
@@ -310,7 +312,7 @@ jobs:
           }
           EOF
 
-          # 1. CinematicWorldView.kt - 3D Engine with REALISTIC TOWER & GIANT WHALE
+          # 1. CinematicWorldView.kt
           cat << 'EOF' > app/src/main/java/com/zatomic/tradinggame/CinematicWorldView.kt
           package com.zatomic.tradinggame
 
@@ -327,7 +329,6 @@ jobs:
               private var prevX = 0f
               private var frame = 0L
 
-              // Auto-Income Floating Text System
               data class FloatingText(val msg: String, var x: Float, var y: Float, var alpha: Float)
               private val floaters = mutableListOf<FloatingText>()
 
@@ -335,7 +336,6 @@ jobs:
                   floaters.add(FloatingText(text, width / 2f - 80f, height / 2f + 50f, 255f))
               }
 
-              // Whale animation logic
               private var whaleProgress = 0f
               private var isWhaleFlying = false
               private var lastWhaleTime = System.currentTimeMillis()
@@ -402,7 +402,7 @@ jobs:
                       paint.style = Paint.Style.STROKE
                       paint.color = Color.parseColor("#2288DDFF")
                       canvas.drawLine(tfr.x, (tfr.y+bfr.y)/2, tbr.x, (tbr.y+bbr.y)/2, paint)
-                      canvas.drawLine((tfr.x+tbr.x)/2, (tfr.y+tbr.y)/2, (bfr.x+bbr.x)/2, (bfr.y+bbr.y)/2, paint)
+                      canvas.drawLine((tfr.x+tbr.x)/2, (tfr.y+tbr.y)/2, (bfr.x+bfr.x)/2, (bfr.y+bfr.y)/2, paint)
                       paint.style = Paint.Style.FILL
                   }
 
@@ -667,7 +667,7 @@ jobs:
           }
           EOF
 
-          # 4. WalletSettingsActivity.kt - FIXED MAHAUL TEXT ERROR
+          # 4. WalletSettingsActivity.kt
           cat << 'EOF' > app/src/main/java/com/zatomic/tradinggame/WalletSettingsActivity.kt
           package com.zatomic.tradinggame
           import android.content.Context
@@ -709,7 +709,6 @@ jobs:
                           updateLabel("t_30m", now, R.id.tvTimer30m, R.id.btnClaim30m, "30 Minute", 5000)
                           updateLabel("t_1h",  now, R.id.tvTimer1h,  R.id.btnClaim1h,  "1 Hour",    10000)
                           
-                          // Corrected encoding dash character here safely
                           findViewById<TextView>(R.id.tvMahaulText).text = "Mahaul: Level $towerFloor Island Tower - All Systems Fast & Secure"
                           delay(1000)
                       }
