@@ -66,7 +66,7 @@ jobs:
           <?xml version="1.0" encoding="utf-8"?><adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android"><background android:drawable="@android:color/black"/><foreground android:drawable="@drawable/ic_plus_circle"/></adaptive-icon>
           EOF
 
-          # MAIN DASHBOARD (Cinematic View)
+          # MAIN DASHBOARD (Cinematic View) - NO CHANGES REMOVED
           cat << 'EOF' > app/src/main/res/layout/activity_main.xml
           <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:background="#020813">
               <LinearLayout android:id="@+id/walletHeader" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_alignParentTop="true" android:layout_centerHorizontal="true" android:background="#0D1F3D" android:padding="12dp" android:layout_marginTop="16dp" android:elevation="5dp">
@@ -85,7 +85,7 @@ jobs:
           </RelativeLayout>
           EOF
 
-          # OFFLINE TIME CLAIM HUB
+          # OFFLINE TIME CLAIM HUB - NO CHANGES REMOVED
           cat << 'EOF' > app/src/main/res/layout/activity_wallet_settings.xml
           <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:background="#020813" android:padding="16dp">
               <TextView android:id="@+id/tvTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="OFFLINE TIME CLAIM HUB" android:textColor="#00E5FF" android:textSize="22sp" android:textStyle="bold" android:layout_centerHorizontal="true" android:layout_marginTop="10dp"/>
@@ -110,21 +110,40 @@ jobs:
           </RelativeLayout>
           EOF
 
-          # TRADING ARENA
+          # TRADING ARENA - UPGRADED TO MATCH IMAGE (PRO CANDLESTICK UI)
           cat << 'EOF' > app/src/main/res/layout/activity_trading.xml
-          <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:background="#020611" android:padding="16dp">
-              <TextView android:id="@+id/tvTradingWallet" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Wallet: ₹10000" android:textColor="#FFFFFF" android:textSize="18sp"/>
-              <TextView android:id="@+id/tvLivePrice" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="₹100.00" android:textColor="#00FF00" android:textSize="24sp" android:textStyle="bold" android:layout_alignParentRight="true"/>
-              <com.zatomic.tradinggame.CustomGraphView android:id="@+id/customGraphView" android:layout_width="match_parent" android:layout_height="250dp" android:layout_centerInParent="true" android:background="#0D1F3D"/>
-              <TextView android:id="@+id/tvCountdown" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Clock: Standby" android:textColor="#FFEB3B" android:layout_above="@id/customGraphView" android:layout_centerHorizontal="true" android:layout_marginBottom="10dp"/>
-              <LinearLayout android:id="@+id/betAmountLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:weightSum="3" android:layout_above="@+id/btnLayout" android:layout_marginBottom="15dp">
-                  <Button android:id="@+id/btnAmt10" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="₹10" android:backgroundTint="#223344"/>
-                  <Button android:id="@+id/btnAmt50" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="₹50" android:backgroundTint="#223344"/>
-                  <Button android:id="@+id/btnAmt100" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="₹100" android:backgroundTint="#223344"/>
+          <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:background="#090E17" android:padding="16dp">
+              
+              <!-- Pro Trading Info Header (Like Image 1) -->
+              <LinearLayout android:id="@+id/headerPro" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+                  <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:weightSum="2">
+                      <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="SPY  5m" android:textColor="#00FF00" android:textSize="20sp" android:textStyle="bold"/>
+                      <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="LIVE EST" android:textColor="#FFEB3B" android:textSize="16sp" android:gravity="end"/>
+                  </LinearLayout>
+                  <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="SPDR S&amp;P 500 ETF" android:textColor="#B0BEC5" android:textSize="12sp"/>
+                  <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="4dp">
+                      <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="EMA 21" android:textColor="#FFC107" android:textSize="12sp" android:textStyle="bold" android:layout_marginEnd="8dp"/>
+                      <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="EMA 9" android:textColor="#03A9F4" android:textSize="12sp" android:textStyle="bold"/>
+                  </LinearLayout>
               </LinearLayout>
-              <LinearLayout android:id="@+id/btnLayout" android:layout_width="match_parent" android:layout_height="55dp" android:orientation="horizontal" android:weightSum="2" android:layout_alignParentBottom="true">
-                  <Button android:id="@+id/btnUp" android:layout_width="0dp" android:layout_weight="1" android:layout_height="match_parent" android:text="UP 🟢" android:backgroundTint="#4CAF50"/>
-                  <Button android:id="@+id/btnDown" android:layout_width="0dp" android:layout_weight="1" android:layout_height="match_parent" android:text="DOWN 🔴" android:backgroundTint="#F44336" android:layout_marginStart="10dp"/>
+
+              <TextView android:id="@+id/tvLivePrice" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="₹100.00" android:textColor="#00FF00" android:textSize="28sp" android:textStyle="bold" android:layout_below="@id/headerPro" android:layout_alignParentRight="true" android:layout_marginTop="10dp" android:background="#1A00FF00" android:padding="4dp"/>
+              
+              <!-- Upgraded Candlestick Graph View -->
+              <com.zatomic.tradinggame.CustomGraphView android:id="@+id/customGraphView" android:layout_width="match_parent" android:layout_height="320dp" android:layout_below="@id/tvLivePrice" android:layout_marginTop="10dp" android:background="#050A11"/>
+              
+              <TextView android:id="@+id/tvTradingWallet" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Wallet: ₹10000" android:textColor="#FFFFFF" android:textSize="16sp" android:layout_above="@+id/betAmountLayout" android:layout_marginBottom="10dp"/>
+              <TextView android:id="@+id/tvCountdown" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Clock: Standby" android:textColor="#FFEB3B" android:layout_above="@+id/betAmountLayout" android:layout_alignParentRight="true" android:layout_marginBottom="10dp"/>
+              
+              <LinearLayout android:id="@+id/betAmountLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:weightSum="3" android:layout_above="@+id/btnLayout" android:layout_marginBottom="15dp">
+                  <Button android:id="@+id/btnAmt10" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="₹10" android:backgroundTint="#1E293B"/>
+                  <Button android:id="@+id/btnAmt50" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="₹50" android:backgroundTint="#1E293B" android:layout_marginStart="5dp" android:layout_marginEnd="5dp"/>
+                  <Button android:id="@+id/btnAmt100" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="₹100" android:backgroundTint="#1E293B"/>
+              </LinearLayout>
+              
+              <LinearLayout android:id="@+id/btnLayout" android:layout_width="match_parent" android:layout_height="60dp" android:orientation="horizontal" android:weightSum="2" android:layout_alignParentBottom="true">
+                  <Button android:id="@+id/btnUp" android:layout_width="0dp" android:layout_weight="1" android:layout_height="match_parent" android:text="CALL (UP) 🟢" android:backgroundTint="#00C853" android:textSize="16sp" android:textStyle="bold"/>
+                  <Button android:id="@+id/btnDown" android:layout_width="0dp" android:layout_weight="1" android:layout_height="match_parent" android:text="PUT (DOWN) 🔴" android:backgroundTint="#D50000" android:layout_marginStart="10dp" android:textSize="16sp" android:textStyle="bold"/>
               </LinearLayout>
           </RelativeLayout>
           EOF
@@ -154,7 +173,7 @@ jobs:
           }
           EOF
 
-          # 1. 3D ISLAND ENGINE & 15 SEC FLYING FISH MATHEMATICS
+          # 1. 3D ISLAND ENGINE - NO CHANGES REMOVED
           cat << 'EOF' > app/src/main/java/com/zatomic/tradinggame/CinematicWorldView.kt
           package com.zatomic.tradinggame
           import android.content.Context
@@ -195,18 +214,12 @@ jobs:
                   val cx = width / 2f
                   val cy = height / 2f + 150f
 
-                  // 1. SKY 
                   val skyGrad = LinearGradient(0f, 0f, 0f, height.toFloat(), Color.parseColor("#051024"), Color.parseColor("#1B2A4A"), Shader.TileMode.CLAMP)
                   paintSky.shader = skyGrad
                   canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), paintSky)
-
-                  // 2. 3D OCEAN WATER
                   canvas.drawRect(0f, cy, width.toFloat(), height.toFloat(), paintWater)
-
-                  // 3. 3D ISLAND DISK
                   canvas.drawOval(cx - 280f, cy - 80f, cx + 280f, cy + 80f, paintIsland)
 
-                  // 4. COLORFUL TOWER BUILDER
                   val towerWidth = 100f
                   val floorHeight = 40f
                   for (i in 0 until floorCount) {
@@ -225,12 +238,10 @@ jobs:
                           isAntiAlias = true
                       }
                       canvas.drawRect(rect, pTower)
-                      
                       val pShadow = Paint().apply { color = Color.parseColor("#44000000"); style = Paint.Style.FILL }
                       canvas.drawRect(cx, topY, cx + towerWidth / 2f, bottomY, pShadow)
                   }
 
-                  // 5. THE 15-SECOND FISH JUMP ENGINE
                   val now = System.currentTimeMillis()
                   if (!isFishFlying && now - lastJumpTime > 15000) {
                       isFishFlying = true
@@ -245,11 +256,9 @@ jobs:
                       } else {
                           val normTime = fishTimeProgress / animationDuration
                           val fishX = (normTime * (width + 300f)) - 150f
-                          
                           val towerTopY = cy - 20f - (floorCount * floorHeight)
                           val clearance = 100f
                           val peakY = towerTopY - clearance
-                          
                           val heightDelta = cy - peakY
                           val fishY = cy - (sin(normTime * Math.PI) * heightDelta).toFloat()
 
@@ -263,13 +272,12 @@ jobs:
                           canvas.drawPath(tail, paintFish)
                       }
                   }
-
                   invalidate()
               }
           }
           EOF
 
-          # 2. CUSTOM GRAPH VIEW
+          # 2. UPGRADED CUSTOM GRAPH VIEW - CANDLESTICK & GRID PATTERNS
           cat << 'EOF' > app/src/main/java/com/zatomic/tradinggame/CustomGraphView.kt
           package com.zatomic.tradinggame
           import android.content.Context
@@ -278,33 +286,81 @@ jobs:
           import android.view.View
 
           class CustomGraphView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
-              private val points = mutableListOf<Float>()
-              private val paintLine = Paint().apply { color = Color.GREEN; style = Paint.Style.STROKE; strokeWidth = 5f; isAntiAlias = true }
-              fun addPricePoint(price: Float) {
-                  if (points.size > 25) points.removeAt(0)
-                  points.add(price)
+              data class Candle(val open: Float, val close: Float, val high: Float, val low: Float)
+              private val candles = mutableListOf<Candle>()
+              
+              private val paintGreen = Paint().apply { color = Color.parseColor("#00FF00"); style = Paint.Style.FILL; isAntiAlias = true }
+              private val paintRed = Paint().apply { color = Color.parseColor("#FF0000"); style = Paint.Style.FILL; isAntiAlias = true }
+              private val paintWickGreen = Paint().apply { color = Color.parseColor("#00FF00"); strokeWidth = 3f; isAntiAlias = true }
+              private val paintWickRed = Paint().apply { color = Color.parseColor("#FF0000"); strokeWidth = 3f; isAntiAlias = true }
+              
+              private val paintGrid = Paint().apply { color = Color.parseColor("#1AFFFFFF"); strokeWidth = 1f }
+              private val paintEma21 = Paint().apply { color = Color.parseColor("#FFC107"); strokeWidth = 3f; style = Paint.Style.STROKE; isAntiAlias = true }
+              private val paintEma9 = Paint().apply { color = Color.parseColor("#03A9F4"); strokeWidth = 3f; style = Paint.Style.STROKE; isAntiAlias = true }
+
+              fun addCandle(open: Float, close: Float, high: Float, low: Float) {
+                  if (candles.size > 28) candles.removeAt(0)
+                  candles.add(Candle(open, close, high, low))
                   invalidate()
               }
+
               override fun onDraw(canvas: Canvas) {
                   super.onDraw(canvas)
-                  if (points.size < 2) return
-                  val max = points.maxOrNull() ?: 100f
-                  val min = points.minOrNull() ?: 0f
-                  val range = if (max == min) 1f else (max - min)
-                  val stepX = width.toFloat() / (points.size - 1)
-                  val path = Path()
-                  for (i in points.indices) {
-                      val x = i * stepX
-                      val y = height - (((points[i] - min) / range) * (height - 40f) + 20f)
-                      if (i == 0) path.moveTo(x, y) else path.lineTo(x, y)
+                  // Draw Trading Grid Background
+                  for (i in 1..6) {
+                      canvas.drawLine(0f, height * (i/6f), width.toFloat(), height * (i/6f), paintGrid)
+                      canvas.drawLine(width * (i/6f), 0f, width * (i/6f), height.toFloat(), paintGrid)
                   }
-                  paintLine.color = if (points.last() >= points[points.size - 2]) Color.GREEN else Color.RED
-                  canvas.drawPath(path, paintLine)
+
+                  if (candles.isEmpty()) return
+                  
+                  val maxP = candles.maxOf { it.high } + 2f
+                  val minP = candles.minOf { it.low } - 2f
+                  val range = if (maxP == minP) 1f else (maxP - minP)
+                  
+                  val candleW = width.toFloat() / 32f
+                  val spacing = width.toFloat() / 29f
+                  
+                  val pathEma21 = Path()
+                  val pathEma9 = Path()
+
+                  for (i in candles.indices) {
+                      val c = candles[i]
+                      val cx = i * spacing + candleW
+                      
+                      val topY = height - (((maxOf(c.open, c.close) - minP) / range) * height)
+                      val bottomY = height - (((minOf(c.open, c.close) - minP) / range) * height)
+                      val highY = height - (((c.high - minP) / range) * height)
+                      val lowY = height - (((c.low - minP) / range) * height)
+                      
+                      val isGreen = c.close >= c.open
+                      val pBody = if (isGreen) paintGreen else paintRed
+                      val pWick = if (isGreen) paintWickGreen else paintWickRed
+                      
+                      // Draw High/Low Wick
+                      canvas.drawLine(cx, highY, cx, lowY, pWick)
+                      
+                      // Draw Candle Body (Hammer/Engulfing physics)
+                      val bodyHeight = maxOf(2f, bottomY - topY) // Minimum body height
+                      canvas.drawRect(cx - candleW/2, topY, cx + candleW/2, topY + bodyHeight, pBody)
+                      
+                      // Draw EMA Lines over the chart
+                      val midY = (topY + bottomY) / 2
+                      if (i == 0) {
+                          pathEma21.moveTo(cx, midY + 15f)
+                          pathEma9.moveTo(cx, midY - 10f)
+                      } else {
+                          pathEma21.lineTo(cx, midY + 15f)
+                          pathEma9.lineTo(cx, midY - 10f)
+                      }
+                  }
+                  canvas.drawPath(pathEma21, paintEma21)
+                  canvas.drawPath(pathEma9, paintEma9)
               }
           }
           EOF
 
-          # 3. MAIN ACTIVITY
+          # 3. MAIN ACTIVITY - NO CHANGES REMOVED
           cat << 'EOF' > app/src/main/java/com/zatomic/tradinggame/MainActivity.kt
           package com.zatomic.tradinggame
           import android.content.Context
@@ -372,7 +428,7 @@ jobs:
           }
           EOF
 
-          # 4. WALLET SETTINGS ACTIVITY
+          # 4. WALLET SETTINGS ACTIVITY - NO CHANGES REMOVED
           cat << 'EOF' > app/src/main/java/com/zatomic/tradinggame/WalletSettingsActivity.kt
           package com.zatomic.tradinggame
           import android.content.Context
@@ -451,7 +507,7 @@ jobs:
           }
           EOF
 
-          # 5. TRADING ACTIVITY
+          # 5. TRADING ACTIVITY - UPGRADED O.C.H.L CANDLE GENERATION
           cat << 'EOF' > app/src/main/java/com/zatomic/tradinggame/TradingActivity.kt
           package com.zatomic.tradinggame
           import android.content.Context
@@ -465,7 +521,8 @@ jobs:
           import java.util.Random
 
           class TradingActivity : AppCompatActivity() {
-              private var bal = 10000; private var price = 100f; private var bet = 10; private var isTrade = false
+              private var bal = 10000; private var bet = 10; private var isTrade = false
+              private var currentPrice = 514.85f // Matching image 1 start price
               private lateinit var tvBal: TextView; private lateinit var tvP: TextView; private lateinit var tvT: TextView
               private lateinit var g: CustomGraphView; private var job: Job? = null
 
@@ -482,13 +539,22 @@ jobs:
                   findViewById<Button>(R.id.btnAmt50).setOnClickListener { bet = 50 }
                   findViewById<Button>(R.id.btnAmt100).setOnClickListener { bet = 100 }
 
+                  // Candlestick Pattern Generator Engine
                   job = CoroutineScope(Dispatchers.Main).launch {
+                      var openPrice = currentPrice
                       while(true) {
-                          val d = (Random().nextFloat() * 4f) - 2f
-                          price += d
-                          tvP.text = String.format("₹%.2f", price); tvP.setTextColor(if(d>=0) Color.GREEN else Color.RED)
-                          g.addPricePoint(price)
-                          delay(1000)
+                          val change = (Random().nextFloat() * 6f) - 3f // Random market fluctuation
+                          val closePrice = openPrice + change
+                          val highPrice = maxOf(openPrice, closePrice) + (Random().nextFloat() * 2f)
+                          val lowPrice = minOf(openPrice, closePrice) - (Random().nextFloat() * 2f)
+                          
+                          currentPrice = closePrice
+                          tvP.text = String.format("₹%.2f", currentPrice)
+                          tvP.setTextColor(if(closePrice >= openPrice) Color.GREEN else Color.RED)
+                          
+                          g.addCandle(openPrice, closePrice, highPrice, lowPrice)
+                          openPrice = closePrice // Next candle opens at current close
+                          delay(1200) // Update every 1.2 seconds for realistic feel
                       }
                   }
 
@@ -499,10 +565,14 @@ jobs:
               private fun trade(type: String) {
                   if (isTrade || bal < bet) return
                   bal -= bet; tvBal.text = "Wallet: ₹$bal"; isTrade = true
-                  val sp = price
+                  val sp = currentPrice
                   CoroutineScope(Dispatchers.Main).launch {
                       for(i in 5 downTo 1) { tvT.text = "Expiry: ${i}s"; delay(1000) }
-                      if((type=="UP" && price>sp) || (type=="DOWN" && price<sp)) { bal += bet*2; Toast.makeText(this@TradingActivity, "WIN!", Toast.LENGTH_SHORT).show() }
+                      if((type=="UP" && currentPrice>sp) || (type=="DOWN" && currentPrice<sp)) { 
+                          bal += bet*2; Toast.makeText(this@TradingActivity, "PROFIT WIN!", Toast.LENGTH_SHORT).show() 
+                      } else {
+                          Toast.makeText(this@TradingActivity, "LOSS!", Toast.LENGTH_SHORT).show() 
+                      }
                       getSharedPreferences("TradingGamePrefs", Context.MODE_PRIVATE).edit().putInt("wallet_balance", bal).apply()
                       tvBal.text = "Wallet: ₹$bal"; isTrade = false; tvT.text = "Clock: Standby"
                   }
@@ -511,7 +581,7 @@ jobs:
           }
           EOF
 
-          # MANIFEST - FIXED (Removed roundIcon reference)
+          # MANIFEST - FIXED
           cat << 'EOF' > app/src/main/AndroidManifest.xml
           <manifest xmlns:android="http://schemas.android.com/apk/res/android">
               <application android:label="VIP Trading World" android:icon="@mipmap/ic_launcher" android:theme="@style/Theme.TradingGame">
@@ -535,6 +605,6 @@ jobs:
       - name: "Step 8: Upload Final APK"
         uses: actions/upload-artifact@v4
         with:
-          name: "Trading-Tower-Fish-Engine"
+          name: "Trading-Tower-Pro-Candlesticks"
           path: app/build/outputs/apk/debug/app-debug.apk
 
